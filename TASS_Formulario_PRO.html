@@ -1227,46 +1227,74 @@
       notas_extra:          document.getElementById('notas-extra').value,
       disponibilidad:       disp,
     };
-    const formData = new FormData();
+    const logoFile = document.getElementById('logo').files[0];
+    const plantillaFile = document.getElementById('plantilla').files[0];
+    const attachments = [logoFile, plantillaFile].filter(Boolean);
+    const hasFiles = attachments.length > 0;
 
     const btn = document.querySelector('.btn-submit');
     btn.textContent = 'Enviando...';
     btn.disabled = true;
 
     try {
-      formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
-      formData.append('subject', 'Nueva implementación TASS PRO — ' + (document.getElementById('nombre').value || ''));
-      formData.append('from_name', 'Formulario TASS PRO');
-      formData.append('replyto', document.getElementById('email').value);
-      formData.append('botcheck', 'false');
+      for (const file of attachments) {
+        const filesizeMb = file.size / (1024 * 1024);
+        if (filesizeMb > 5) {
+          throw new Error('Web3Forms permite archivos de hasta 5 MB por adjunto.');
+        }
+      }
 
-      Object.entries(payload).forEach(([key, value]) => {
-        formData.append(key, value || '');
-      });
+      let res;
+      let result;
 
-      const logoFile = document.getElementById('logo').files[0];
-      if (logoFile) formData.append('logo', logoFile);
+      if (hasFiles) {
+        const formData = new FormData();
+        formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
+        formData.append('subject', 'Nueva implementación TASS PRO — ' + (document.getElementById('nombre').value || ''));
+        formData.append('from_name', 'Formulario TASS PRO');
+        formData.append('replyto', document.getElementById('email').value);
+        formData.append('botcheck', '');
 
-      const plantillaFile = document.getElementById('plantilla').files[0];
-      if (plantillaFile) formData.append('plantilla', plantillaFile);
+        Object.entries(payload).forEach(([key, value]) => {
+          formData.append(key, value || '');
+        });
 
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
+        if (logoFile) formData.append('logo', logoFile);
+        if (plantillaFile) formData.append('plantilla', plantillaFile);
 
-      if (res.ok) {
+        res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+      } else {
+        res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: '2023fc73-9f5e-4276-a4bb-75eec251f67e',
+            subject: 'Nueva implementación TASS PRO — ' + (document.getElementById('nombre').value || ''),
+            from_name: 'Formulario TASS PRO',
+            replyto: document.getElementById('email').value,
+            botcheck: '',
+            ...payload
+          })
+        });
+      }
+
+      result = await res.json().catch(() => ({}));
+
+      if (res.ok && result.success !== false) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.h-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
         document.getElementById('success').classList.add('show');
         window.scrollTo({top: 0, behavior:'smooth'});
       } else {
-        throw new Error('Error al enviar');
+        throw new Error(result.message || 'Error al enviar el formulario.');
       }
     } catch(e) {
       btn.textContent = 'Enviar formulario PRO ✓';
       btn.disabled = false;
-      alert('Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
+      alert(e.message || 'Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
     }
   }
 

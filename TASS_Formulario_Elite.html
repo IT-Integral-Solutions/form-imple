@@ -1596,58 +1596,84 @@
       notas_extra:          document.getElementById('notas-extra').value,
       disponibilidad:       disp,
     };
-    const formData = new FormData();
+    const logoFile = document.getElementById('logo').files[0];
+    const logoDarkFile = document.getElementById('logo-dark').files[0];
+    const plantillaFile = document.getElementById('plantilla').files[0];
+    const firmaFile = document.getElementById('foto-firma').files[0];
+    const fotosWebFiles = Array.from(document.getElementById('fotos-web').files);
+    const attachments = [logoFile, logoDarkFile, plantillaFile, firmaFile, ...fotosWebFiles].filter(Boolean);
+    const hasFiles = attachments.length > 0;
 
     const btn = document.querySelector('.btn-submit');
     btn.textContent = 'Enviando...';
     btn.disabled = true;
 
     try {
-      formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
-      formData.append('subject', 'Nueva implementación TASS Elite ★ — ' + (document.getElementById('nombre').value || '') + ' · ' + (document.getElementById('agencia').value || ''));
-      formData.append('from_name', 'Formulario TASS Elite');
-      formData.append('replyto', document.getElementById('email').value);
-      formData.append('botcheck', 'false');
-
-      Object.entries(payload).forEach(([key, value]) => {
-        formData.append(key, value || '');
-      });
-
-      const logoFile = document.getElementById('logo').files[0];
-      if (logoFile) formData.append('logo', logoFile);
-
-      const logoDarkFile = document.getElementById('logo-dark').files[0];
-      if (logoDarkFile) formData.append('logo_dark', logoDarkFile);
-
-      const plantillaFile = document.getElementById('plantilla').files[0];
-      if (plantillaFile) formData.append('plantilla', plantillaFile);
-
-      const firmaFile = document.getElementById('foto-firma').files[0];
-      if (firmaFile) formData.append('foto_firma', firmaFile);
-
-      const fotosWebFiles = document.getElementById('fotos-web').files;
-      for (const file of fotosWebFiles) {
-        formData.append('fotos_web[]', file);
+      for (const file of attachments) {
+        const filesizeMb = file.size / (1024 * 1024);
+        if (filesizeMb > 5) {
+          throw new Error('Web3Forms permite archivos de hasta 5 MB por adjunto.');
+        }
       }
 
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
+      let res;
+      let result;
 
-      if (res.ok) {
+      if (hasFiles) {
+        const formData = new FormData();
+        formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
+        formData.append('subject', 'Nueva implementación TASS Elite ★ — ' + (document.getElementById('nombre').value || '') + ' · ' + (document.getElementById('agencia').value || ''));
+        formData.append('from_name', 'Formulario TASS Elite');
+        formData.append('replyto', document.getElementById('email').value);
+        formData.append('botcheck', '');
+
+        Object.entries(payload).forEach(([key, value]) => {
+          formData.append(key, value || '');
+        });
+
+        if (logoFile) formData.append('logo', logoFile);
+        if (logoDarkFile) formData.append('logo_dark', logoDarkFile);
+        if (plantillaFile) formData.append('plantilla', plantillaFile);
+        if (firmaFile) formData.append('foto_firma', firmaFile);
+
+        fotosWebFiles.forEach((file, index) => {
+          formData.append(`fotos_web_${index + 1}`, file);
+        });
+
+        res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        });
+      } else {
+        res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: '2023fc73-9f5e-4276-a4bb-75eec251f67e',
+            subject: 'Nueva implementación TASS Elite ★ — ' + (document.getElementById('nombre').value || '') + ' · ' + (document.getElementById('agencia').value || ''),
+            from_name: 'Formulario TASS Elite',
+            replyto: document.getElementById('email').value,
+            botcheck: '',
+            ...payload
+          })
+        });
+      }
+
+      result = await res.json().catch(() => ({}));
+
+      if (res.ok && result.success !== false) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById('success').classList.add('show');
         document.getElementById('progress-fill').style.width = '100%';
         document.getElementById('progress-pct').textContent = '100%';
         window.scrollTo({top: 0, behavior:'smooth'});
       } else {
-        throw new Error('Error al enviar');
+        throw new Error(result.message || 'Error al enviar el formulario.');
       }
     } catch(e) {
       btn.textContent = 'Enviar formulario Elite ★';
       btn.disabled = false;
-      alert('Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
+      alert(e.message || 'Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
     }
   }
 
