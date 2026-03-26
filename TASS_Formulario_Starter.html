@@ -863,7 +863,7 @@
         const formData = new FormData();
         formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
         formData.append('subject', 'Nueva implementación TASS Starter — ' + (nombre || ''));
-        formData.append('from_name', 'Formulario TASS');
+        formData.append('from_name', 'TASS Starter');
         formData.append('replyto', email);
         formData.append('cf-turnstile-response', turnstileToken);
 
@@ -885,7 +885,7 @@
           body: JSON.stringify({
             access_key: '2023fc73-9f5e-4276-a4bb-75eec251f67e',
             subject: 'Nueva implementación TASS Starter — ' + (nombre || ''),
-            from_name: 'Formulario TASS',
+            from_name: 'TASS Starter',
             replyto: email,
             'cf-turnstile-response': turnstileToken,
             ...payload

@@ -1282,7 +1282,7 @@
         const formData = new FormData();
         formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
         formData.append('subject', 'Nueva implementación TASS PRO — ' + (nombre || ''));
-        formData.append('from_name', 'Formulario TASS PRO');
+        formData.append('from_name', 'TASS PRO');
         formData.append('replyto', email);
         formData.append('cf-turnstile-response', turnstileToken);
 
@@ -1304,7 +1304,7 @@
           body: JSON.stringify({
             access_key: '2023fc73-9f5e-4276-a4bb-75eec251f67e',
             subject: 'Nueva implementación TASS PRO — ' + (nombre || ''),
-            from_name: 'Formulario TASS PRO',
+            from_name: 'TASS PRO',
             replyto: email,
             'cf-turnstile-response': turnstileToken,
             ...payload
