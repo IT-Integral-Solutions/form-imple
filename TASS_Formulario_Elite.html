@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TASS Elite · Formulario de Implementación</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B3E;
+    --teal: #00B4D8;
+    --teal-light: #E8F8FC;
+    --gold: #F4A623;
+    --gold-light: #FEF6E6;
+    --gold-dark: #C17D0D;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-300: #CBD5E1;
+    --gray-500: #64748B;
+    --gray-700: #334155;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-700);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(244,166,35,0.10);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(0,180,216,0.07);
+  }
+  .header-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 44px 32px 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .elite-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(244,166,35,0.18);
+    border: 1px solid rgba(244,166,35,0.45);
+    border-radius: 100px;
+    padding: 5px 14px;
+    margin-bottom: 20px;
+  }
+  .elite-badge span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .elite-badge::before {
+    content: '★';
+    font-size: 10px;
+    color: var(--gold);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.3)}
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 36px);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    max-width: 520px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 20px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+  }
+  .header-meta-item strong { color: var(--gold); font-weight: 600; }
+
+  .header-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 20px;
+  }
+  .h-step {
+    flex: 1;
+    min-width: 70px;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 6px 4px;
+    cursor: pointer;
+    transition: color .2s;
+    position: relative;
+  }
+  .h-step.active { color: var(--gold); }
+  .h-step.done { color: rgba(255,255,255,0.55); }
+  .h-step.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 20%; right: 20%;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+  .h-step-num {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: inherit;
+  }
+  .h-step.done .h-step-num::after { content: ' ✓'; font-size: 10px; }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 32px 80px;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; animation: fadeUp .35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    background: var(--gold-light);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    border: 1px solid rgba(244,166,35,0.2);
+  }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); line-height: 1.2; }
+  .section-subtitle { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+  .section-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    background: var(--gold-light);
+    border: 1px solid rgba(244,166,35,0.3);
+    border-radius: 100px;
+    padding: 2px 9px;
+    margin-top: 5px;
+  }
+
+  /* ── FIELDS ── */
+  .field-group { margin-bottom: 20px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media(max-width:580px){
+    .field-row, .field-row-3 { grid-template-columns: 1fr; }
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  label .req { color: var(--gold); margin-left: 2px; }
+  label .opt {
+    font-weight: 400;
+    color: var(--gray-500);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+
+  input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--white);
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(244,166,35,0.12);
+  }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  select { cursor: pointer; }
+  input::placeholder, textarea::placeholder { color: var(--gray-300); }
+
+  /* ── COLOR INPUT ── */
+  .color-row { display: flex; gap: 10px; align-items: center; }
+  .color-row input[type=color] {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    padding: 3px;
+    cursor: pointer;
+    border: 1.5px solid var(--gray-300);
+    flex-shrink: 0;
+  }
+  .color-row input[type=text] { flex: 1; }
+
+  /* ── FILE DROP ── */
+  .file-drop {
+    border: 2px dashed var(--gray-300);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+  }
+  .file-drop:hover, .file-drop.dragover {
+    border-color: var(--gold);
+    background: var(--gold-light);
+  }
+  .file-drop input[type=file] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+  }
+  .file-drop-icon { font-size: 28px; margin-bottom: 8px; }
+  .file-drop p { font-size: 13px; color: var(--gray-500); }
+  .file-drop strong { color: var(--navy); font-weight: 600; }
+  .file-name {
+    display: none;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-dark);
+  }
+
+  /* ── CHIPS ── */
+  .chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1.5px solid var(--gray-300);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+    color: var(--gray-500);
+  }
+  .chip.selected {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .chip:hover:not(.selected) {
+    border-color: var(--gold);
+    color: var(--gold-dark);
+  }
+
+  /* ── COND CARDS ── */
+  .cond-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  @media(max-width:540px){ .cond-cards { grid-template-columns: 1fr; } }
+  .cond-card {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+  }
+  .cond-card.selected { border-color: var(--gold); background: var(--gold-light); }
+  .cond-card input[type=radio] { position: absolute; opacity: 0; }
+  .cond-card-label { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+  .cond-card-desc { font-size: 12px; color: var(--gray-500); }
+  .cond-card.selected .cond-card-label { color: var(--gold-dark); }
+
+  /* ── CARDS GRID 3 ── */
+  .cards-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media(max-width:600px){ .cards-3 { grid-template-columns: 1fr; } }
+  .card-opt {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+    text-align: center;
+  }
+  .card-opt.selected { border-color: var(--gold); background: var(--gold-light); }
+  .card-opt input { position: absolute; opacity: 0; }
+  .card-opt-icon { font-size: 22px; margin-bottom: 6px; }
+  .card-opt-label { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .card-opt-desc { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+  .card-opt.selected .card-opt-label { color: var(--gold-dark); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 24px 0;
+  }
+
+  /* ── HINT / ELITE BOX ── */
+  .hint {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--navy);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .hint-gold {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--navy);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .hint-gold strong { color: var(--gold-dark); }
+
+  /* ── INLINE TOGGLE ── */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .toggle-row:hover { border-color: var(--gold); }
+  .toggle-row.active { border-color: var(--gold); background: var(--gold-light); }
+  .toggle-label { font-size: 14px; font-weight: 500; color: var(--navy); }
+  .toggle-desc { font-size: 12px; color: var(--gray-500); margin-top: 1px; }
+  .toggle-switch {
+    width: 40px; height: 22px;
+    border-radius: 100px;
+    background: var(--gray-300);
+    position: relative;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: white;
+    top: 3px; left: 3px;
+    transition: transform .2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+  }
+  .toggle-row.active .toggle-switch { background: var(--gold); }
+  .toggle-row.active .toggle-switch::after { transform: translateX(18px); }
+
+  /* ── NAVIGATION ── */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .18s;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--gray-500);
+    border: 1.5px solid var(--gray-300);
+  }
+  .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(13,27,62,0.2);
+  }
+  .btn-primary:hover { background: #162550; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(13,27,62,0.28); }
+  .btn-submit {
+    background: linear-gradient(135deg, var(--gold) 0%, #e8941a 100%);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(244,166,35,0.4);
+    padding: 13px 36px;
+    font-size: 15px;
+  }
+  .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(244,166,35,0.5); }
+
+  .progress-text { font-size: 12px; color: var(--gray-500); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-100);
+    padding: 8px 32px;
+    max-width: 100%;
+  }
+  .progress-bar-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .progress-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--gray-100);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    border-radius: 4px;
+    transition: width .4s ease;
+    width: 12.5%;
+  }
+  .progress-bar-pct {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-500);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* ── SUCCESS ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    animation: fadeUp .4s ease;
+  }
+  .success-screen.show { display: block; }
+  .success-icon {
+    width: 80px; height: 80px;
+    background: var(--gold-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin: 0 auto 20px;
+    border: 2px solid rgba(244,166,35,0.3);
+  }
+  .success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .success-screen h2 em { font-style: italic; color: var(--gold-dark); }
+  .success-screen p {
+    font-size: 15px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    max-width: 460px;
+    margin: 0 auto 28px;
+  }
+  .success-steps {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    background: var(--gold-light);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    max-width: 420px;
+    width: 100%;
+    border: 1px solid rgba(244,166,35,0.2);
+  }
+  .success-step { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--navy); font-weight: 500; }
+  .ss-num {
+    width: 26px; height: 26px;
+    background: var(--gold);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .ss-detail { font-size: 11px; color: var(--gray-500); font-weight: 400; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div style="margin-bottom:20px;">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgNjAiIGZpbGw9Im5vbmUiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMSIgeDE9IjEzIiB5MT0iMTYiIHgyPSIzOSIgeTI9IjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZDRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTczZTgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImcyIiB4MT0iMTMiIHkxPSIyMiIgeDI9IjM5IiB5Mj0iMjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZDRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMjYsMTE1LDIzMiwwLjUpIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0LDExKSBzY2FsZSgxLjApIj4KICAgIDxsaW5lIHgxPSIxMyIgeTE9IjE2IiB4Mj0iMzkiIHkyPSI5IiAgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1kYXNoYXJyYXk9IjIgMiIvPgogICAgPGxpbmUgeDE9IjEzIiB5MT0iMjIiIHgyPSIzOSIgeTI9IjI5IiBzdHJva2U9InVybCgjZzIpIiBzdHJva2Utd2lkdGg9IjEuMiIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+CiAgICA8bGluZSB4MT0iNDQiIHkxPSIxMiIgeDI9IjQ0IiB5Mj0iMjYiIHN0cm9rZT0icmdiYSgwLDIxMiwyNTUsMC4yNSkiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+CiAgICA8Y2lyY2xlIGN4PSI4IiAgY3k9IjE5IiByPSI1IiAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwZDRmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDxjaXJjbGUgY3g9IjgiICBjeT0iMTkiIHI9IjIuNSIgZmlsbD0iIzFhNzNlOCIvPgogICAgPGNpcmNsZSBjeD0iNDQiIGN5PSI3IiAgcj0iNSIgICBmaWxsPSJub25lIiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICA8Y2lyY2xlIGN4PSI0NCIgY3k9IjciICByPSIyLjUiIGZpbGw9IiMxYTczZTgiLz4KICAgIDxjaXJjbGUgY3g9IjQ0IiBjeT0iMzEiIHI9IjUiICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMjEyLDI1NSwwLjUpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPGNpcmNsZSBjeD0iNDQiIGN5PSIzMSIgcj0iMi41IiBmaWxsPSJyZ2JhKDI2LDExNSwyMzIsMC41NSkiLz4KICA8L2c+CiAgPHRleHQgeD0iNjIiIHk9IjM2IiBmb250LWZhbWlseT0iUmFqZGhhbmksUG9wcGlucyxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjI4IiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iI2ZmZmZmZiI+CiAgICA8dHNwYW4gZmlsbD0iIzAwZDRmZiI+SVQ8L3RzcGFuPi1JbnRlZ3JhbAogIDwvdGV4dD4KICA8dGV4dCB4PSI2NCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJQb3BwaW5zLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSIzMDAiIGZvbnQtc2l6ZT0iOSIgbGV0dGVyLXNwYWNpbmc9IjUiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yOCkiPlNPTFVUSU9OUzwvdGV4dD4KPC9zdmc+" alt="IT-Integral Solutions" style="height:40px;display:block;">
+    </div>
+    <div class="elite-badge"><span>TASS · Elite</span></div>
+    <h1>Formulario de<br><em>Implementación Elite</em></h1>
+    <p>Tu ecosistema completo: sistema, sitio web, email profesional e Instagram automatizado. Solo te lleva unos minutos — cuanto más detalles nos des, mejor quedará todo.</p>
+    <div class="header-meta">
+      <div class="header-meta-item">⏱ <strong>~15 min</strong> para completar</div>
+      <div class="header-meta-item">📋 <strong>8 secciones</strong></div>
+      <div class="header-meta-item">📅 <strong>45 días hábiles</strong> de implementación</div>
+    </div>
+    <div class="header-steps">
+      <div class="h-step active" onclick="goTo(0)"><span class="h-step-num">1</span>Datos</div>
+      <div class="h-step" onclick="goTo(1)"><span class="h-step-num">2</span>Marca</div>
+      <div class="h-step" onclick="goTo(2)"><span class="h-step-num">3</span>Destinos</div>
+      <div class="h-step" onclick="goTo(3)"><span class="h-step-num">4</span>Operación</div>
+      <div class="h-step" onclick="goTo(4)"><span class="h-step-num">5</span>Web</div>
+      <div class="h-step" onclick="goTo(5)"><span class="h-step-num">6</span>Email</div>
+      <div class="h-step" onclick="goTo(6)"><span class="h-step-num">7</span>Instagram</div>
+      <div class="h-step" onclick="goTo(7)"><span class="h-step-num">8</span>Asesoría</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-inner">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-bar-pct" id="progress-pct">12%</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ── SECCIÓN 1: DATOS DEL AGENTE ── -->
+  <div class="section active" id="sec-0">
+    <div class="section-header">
+      <div class="section-icon">👤</div>
+      <div>
+        <div class="section-title">Datos del Agente</div>
+        <div class="section-subtitle">Información de contacto y datos de la agencia</div>
+        <div class="section-tag">Sección 1 de 8</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="Ej: María González" required>
+      </div>
+      <div class="field-group">
+        <label>Nombre de la agencia <span class="req">*</span></label>
+        <input type="text" id="agencia" placeholder="Ej: Viajes del Sur">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Email de trabajo <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="hola@tuagencia.com">
+      </div>
+      <div class="field-group">
+        <label>WhatsApp / Teléfono <span class="req">*</span></label>
+        <input type="tel" id="telefono" placeholder="+54 9 11 0000-0000">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Sitio web actual <span class="opt">(si tenés)</span></label>
+        <input type="url" id="web-actual" placeholder="https://tuagencia.com">
+      </div>
+      <div class="field-group">
+        <label>País y ciudad donde operás <span class="req">*</span></label>
+        <input type="text" id="pais" placeholder="Ej: Argentina · Buenos Aires">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>¿Cómo conociste TASS? <span class="opt">(opcional)</span></label>
+      <select id="origen">
+        <option value="">— Seleccioná —</option>
+        <option value="instagram">Instagram</option>
+        <option value="recomendacion">Recomendación de colega</option>
+        <option value="google">Google</option>
+        <option value="whatsapp">WhatsApp / grupo</option>
+        <option value="evento">Evento o feria de turismo</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+
+    <div class="nav">
+      <span class="progress-text">Sección 1 de 8</span>
+      <button class="btn btn-primary" onclick="next(0)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 2: MARCA ── -->
+  <div class="section" id="sec-1">
+    <div class="section-header">
+      <div class="section-icon">🎨</div>
+      <div>
+        <div class="section-title">Identidad de Marca</div>
+        <div class="section-subtitle">Para personalizar todo el ecosistema con tu imagen</div>
+        <div class="section-tag">Sección 2 de 8</div>
+      </div>
+    </div>
+
+    <div class="hint-gold">
+      <strong>Tip Elite:</strong> Esta información se aplica al sistema, sitio web, email y automatizaciones. Cuanto más completa, más profesional y coherente queda todo.
+    </div>
+
+    <div class="field-group">
+      <label>Logo <span class="req">*</span></label>
+      <div class="file-drop" id="logo-drop">
+        <input type="file" id="logo" name="logo" accept="image/*,.svg,.pdf" onchange="handleFile(this,'logo-name')">
+        <div class="file-drop-icon">📎</div>
+        <p><strong>Subí tu logo</strong><br>PNG, SVG o PDF · Fondo transparente ideal</p>
+        <div class="file-name" id="logo-name"></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>¿Tenés versión del logo para fondo oscuro? <span class="opt">(recomendado para el sitio)</span></label>
+      <div class="file-drop">
+        <input type="file" id="logo-dark" name="logo_dark" accept="image/*,.svg" onchange="handleFile(this,'logo-dark-name')">
+        <div class="file-drop-icon">🌙</div>
+        <p><strong>Logo versión clara / fondo oscuro</strong><br>PNG o SVG</p>
+        <div class="file-name" id="logo-dark-name"></div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Color principal <span class="req">*</span></label>
+        <div class="color-row">
+          <input type="color" id="color1-pick" value="#0D1B3E" oninput="syncColor('color1-pick','color1-hex')">
+          <input type="text" id="color1-hex" placeholder="#0D1B3E" oninput="syncHex('color1-hex','color1-pick')">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Color secundario <span class="opt">(opcional)</span></label>
+        <div class="color-row">
+          <input type="color" id="color2-pick" value="#00B4D8" oninput="syncColor('color2-pick','color2-hex')">
+          <input type="text" id="color2-hex" placeholder="#00B4D8" oninput="syncHex('color2-hex','color2-pick')">
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Color de acento <span class="opt">(botones, highlights)</span></label>
+      <div class="color-row">
+        <input type="color" id="color3-pick" value="#F4A623" oninput="syncColor('color3-pick','color3-hex')">
+        <input type="text" id="color3-hex" placeholder="#F4A623" oninput="syncHex('color3-hex','color3-pick')">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>Slogan o frase de marca <span class="opt">(opcional)</span></label>
+      <input type="text" id="slogan" placeholder="Ej: Viajá sin límites · Tu agencia de confianza">
+    </div>
+
+    <div class="field-group">
+      <label>Descripción corta de la agencia <span class="req">*</span></label>
+      <textarea id="descripcion-agencia" placeholder="En 2-3 oraciones: qué hacés, a quién le vendés y qué te diferencia. Esto se usa en la web, el email y el perfil de Instagram." style="min-height:80px"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Tipografía / estilo visual que te gusta <span class="opt">(opcional)</span></label>
+      <textarea id="estilo-visual" placeholder="Ej: Elegante y moderno, colores oscuros. O: Alegre y colorida, estilo de verano. Podés mencionar agencias o marcas cuyo estilo te gusta..." style="min-height:70px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(1)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 2 de 8</span>
+        <button class="btn btn-primary" onclick="next(1)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: DESTINOS ── -->
+  <div class="section" id="sec-2">
+    <div class="section-header">
+      <div class="section-icon">🌍</div>
+      <div>
+        <div class="section-title">Destinos y Especialidades</div>
+        <div class="section-subtitle">Lo que vendés y a quién le vendés</div>
+        <div class="section-tag">Sección 3 de 8</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Destinos principales que vendés <span class="req">*</span></label>
+      <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Seleccioná todos los que aplican</p>
+      <div class="chips-wrap" id="destinos-chips">
+        <div class="chip" onclick="toggleChip(this)">Caribe</div>
+        <div class="chip" onclick="toggleChip(this)">Europa</div>
+        <div class="chip" onclick="toggleChip(this)">USA / Canadá</div>
+        <div class="chip" onclick="toggleChip(this)">América del Sur</div>
+        <div class="chip" onclick="toggleChip(this)">México</div>
+        <div class="chip" onclick="toggleChip(this)">Asia</div>
+        <div class="chip" onclick="toggleChip(this)">Cruceros</div>
+        <div class="chip" onclick="toggleChip(this)">Luna de miel</div>
+        <div class="chip" onclick="toggleChip(this)">Turismo aventura</div>
+        <div class="chip" onclick="toggleChip(this)">Corporativo</div>
+        <div class="chip" onclick="toggleChip(this)">Patagonia</div>
+        <div class="chip" onclick="toggleChip(this)">África / Safari</div>
+        <div class="chip" onclick="toggleChip(this)">Disney / Orlando</div>
+        <div class="chip" onclick="toggleChip(this)">Universal Studios</div>
+        <div class="chip" onclick="toggleChip(this)">California</div>
+        <div class="chip" onclick="toggleChip(this)">Medio Oriente</div>
+        <div class="chip" onclick="toggleChip(this)">Oceanía</div>
+        <div class="chip" onclick="toggleChip(this)">Turismo nacional</div>
+      </div>
+    </div>
+
+    <div class="field-group" style="margin-top:14px">
+      <label>Otros destinos <span class="opt">(opcional)</span></label>
+      <input type="text" id="otros-destinos" placeholder="Ej: Islandia, Japón, Galápagos, Marruecos...">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Hay algún destino o nicho en el que seas especialista? <span class="opt">(opcional)</span></label>
+      <input type="text" id="especialidad" placeholder="Ej: Lunas de miel en el Caribe · Circuitos por Europa · Viajes a Israel">
+    </div>
+
+    <div class="field-group">
+      <label>Perfil de tu cliente ideal <span class="req">*</span></label>
+      <div class="cards-3">
+        <div class="card-opt" onclick="selectCard(this,'perfil')">
+          <input type="radio" name="perfil" value="familias">
+          <div class="card-opt-icon">👨‍👩‍👧</div>
+          <div class="card-opt-label">Familias</div>
+          <div class="card-opt-desc">Viajes en grupo familiar</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'perfil')">
+          <input type="radio" name="perfil" value="parejas">
+          <div class="card-opt-icon">💑</div>
+          <div class="card-opt-label">Parejas</div>
+          <div class="card-opt-desc">Romanticos y lunas de miel</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'perfil')">
+          <input type="radio" name="perfil" value="corporativo">
+          <div class="card-opt-icon">💼</div>
+          <div class="card-opt-label">Corporativo</div>
+          <div class="card-opt-desc">Empresas y grupos</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'perfil')">
+          <input type="radio" name="perfil" value="adultos-mayores">
+          <div class="card-opt-icon">🧓</div>
+          <div class="card-opt-label">Adultos mayores</div>
+          <div class="card-opt-desc">Viajes tranquilos y cómodos</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'perfil')">
+          <input type="radio" name="perfil" value="jovenes">
+          <div class="card-opt-icon">🎒</div>
+          <div class="card-opt-label">Jóvenes</div>
+          <div class="card-opt-desc">Mochileros y aventureros</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'perfil')">
+          <input type="radio" name="perfil" value="mixto">
+          <div class="card-opt-icon">🌐</div>
+          <div class="card-opt-label">Mixto</div>
+          <div class="card-opt-desc">Todo tipo de clientes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(2)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 3 de 8</span>
+        <button class="btn btn-primary" onclick="next(2)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 4: OPERACIÓN ── -->
+  <div class="section" id="sec-3">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div>
+        <div class="section-title">Operación y Sistema</div>
+        <div class="section-subtitle">Cómo trabajás hoy y qué necesita tu sistema TASS</div>
+        <div class="section-tag">Sección 4 de 8</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>¿Qué tipo de presupuestos armás? <span class="req">*</span></label>
+      <textarea id="tipo-presupuestos" placeholder="Ej: Paquetes completos con vuelo + hotel + traslados. También solo alojamiento o circuitos con guía incluido..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>¿Tenés plantillas de presupuesto actuales? <span class="req">*</span></label>
+      <select id="tiene-plantillas" onchange="mostrarAdjunto()">
+        <option value="">— Seleccioná —</option>
+        <option value="si-excel">Sí, en Excel / Google Sheets</option>
+        <option value="si-word">Sí, en Word / PDF</option>
+        <option value="si-otro">Sí, en otro formato</option>
+        <option value="no">No, armo cada uno desde cero</option>
+        <option value="mental">Las manejo de memoria / WhatsApp</option>
+      </select>
+    </div>
+
+    <div class="field-group" id="adjuntar-plantilla-wrap" style="display:none">
+      <label>Adjuntá una plantilla de ejemplo <span class="opt">(muy útil para configurar tu Auto Quote)</span></label>
+      <div class="file-drop">
+        <input type="file" id="plantilla" name="plantilla" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx" onchange="handleFile(this,'plantilla-name')">
+        <div class="file-drop-icon">📊</div>
+        <p><strong>Subí una plantilla</strong><br>Excel, Word o PDF</p>
+        <div class="file-name" id="plantilla-name"></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>Condición de pago que ofrecés a clientes <span class="req">*</span></label>
+      <div class="cond-cards">
+        <div class="cond-card" onclick="selectCond(this,'seña-saldo')">
+          <input type="radio" name="cond" value="seña-saldo">
+          <div class="cond-card-label">Seña + Saldo</div>
+          <div class="cond-card-desc">Pago en 2 cuotas antes del viaje</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'cuotas')">
+          <input type="radio" name="cond" value="cuotas">
+          <div class="cond-card-label">Cuotas mensuales</div>
+          <div class="cond-card-desc">Plan de pago en varios meses</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'contado')">
+          <input type="radio" name="cond" value="contado">
+          <div class="cond-card-label">Contado total</div>
+          <div class="cond-card-desc">Pago único al reservar</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'mixto')">
+          <input type="radio" name="cond" value="mixto">
+          <div class="cond-card-label">Mixto / Variable</div>
+          <div class="cond-card-desc">Depende del paquete</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Medios de pago que aceptás <span class="req">*</span></label>
+      <div class="chips-wrap" id="medios-chips">
+        <div class="chip" onclick="toggleChip(this)">Transferencia bancaria</div>
+        <div class="chip" onclick="toggleChip(this)">MercadoPago</div>
+        <div class="chip" onclick="toggleChip(this)">Tarjeta de crédito</div>
+        <div class="chip" onclick="toggleChip(this)">Tarjeta de débito</div>
+        <div class="chip" onclick="toggleChip(this)">Efectivo</div>
+        <div class="chip" onclick="toggleChip(this)">PayPal</div>
+        <div class="chip" onclick="toggleChip(this)">Cripto</div>
+        <div class="chip" onclick="toggleChip(this)">Western Union</div>
+        <div class="chip" onclick="toggleChip(this)">Dólar billete</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Cuántos clientes activos manejás en promedio? <span class="opt">(aproximado)</span></label>
+      <select id="cantidad-clientes">
+        <option value="">— Seleccioná —</option>
+        <option value="1-10">Menos de 10</option>
+        <option value="10-30">Entre 10 y 30</option>
+        <option value="30-60">Entre 30 y 60</option>
+        <option value="60-100">Entre 60 y 100</option>
+        <option value="100+">Más de 100</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Herramientas que usás actualmente <span class="opt">(opcional)</span></label>
+      <div class="chips-wrap" id="herramientas-chips">
+        <div class="chip" onclick="toggleChip(this)">Excel / Sheets</div>
+        <div class="chip" onclick="toggleChip(this)">WhatsApp Business</div>
+        <div class="chip" onclick="toggleChip(this)">Notion</div>
+        <div class="chip" onclick="toggleChip(this)">Trello</div>
+        <div class="chip" onclick="toggleChip(this)">Gmail</div>
+        <div class="chip" onclick="toggleChip(this)">Outlook</div>
+        <div class="chip" onclick="toggleChip(this)">CRM propio</div>
+        <div class="chip" onclick="toggleChip(this)">Canva</div>
+        <div class="chip" onclick="toggleChip(this)">Ninguna en particular</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(3)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 4 de 8</span>
+        <button class="btn btn-primary" onclick="next(3)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 5: SITIO WEB ── -->
+  <div class="section" id="sec-4">
+    <div class="section-header">
+      <div class="section-icon">🌐</div>
+      <div>
+        <div class="section-title">Tu Sitio Web</div>
+        <div class="section-subtitle">Para construir tu presencia digital profesional</div>
+        <div class="section-tag">Sección 5 de 8</div>
+      </div>
+    </div>
+
+    <div class="hint-gold">
+      <strong>¿Ya tenés dominio?</strong> Si ya compraste un dominio, usaremos ese. Si no, te recomendamos uno durante el kick-off. Los costos de dominio y hosting se informan en esa reunión.
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Dominio deseado <span class="opt">(si ya tenés o tenés en mente)</span></label>
+        <input type="text" id="dominio" placeholder="Ej: viajesmaría.com · miagencia.com.ar">
+      </div>
+      <div class="field-group">
+        <label>¿Ya compraste el dominio?</label>
+        <select id="tiene-dominio">
+          <option value="">— Seleccioná —</option>
+          <option value="si">Sí, ya lo tengo</option>
+          <option value="no">No, necesito ayuda para comprarlo</option>
+          <option value="no-idea">No lo sé</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>Secciones que querés en tu sitio <span class="req">*</span></label>
+      <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Seleccioná las páginas que debe tener</p>
+      <div class="chips-wrap" id="secciones-web-chips">
+        <div class="chip" onclick="toggleChip(this)">Inicio / Home</div>
+        <div class="chip selected" onclick="toggleChip(this)">Sobre mí / Quiénes somos</div>
+        <div class="chip selected" onclick="toggleChip(this)">Destinos</div>
+        <div class="chip selected" onclick="toggleChip(this)">Formulario de contacto</div>
+        <div class="chip" onclick="toggleChip(this)">Galería de fotos</div>
+        <div class="chip" onclick="toggleChip(this)">Testimonios</div>
+        <div class="chip" onclick="toggleChip(this)">Blog / Novedades</div>
+        <div class="chip" onclick="toggleChip(this)">Paquetes destacados</div>
+        <div class="chip" onclick="toggleChip(this)">Preguntas frecuentes</div>
+        <div class="chip" onclick="toggleChip(this)">Política de privacidad</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Estilo visual del sitio que preferís <span class="req">*</span></label>
+      <div class="cond-cards">
+        <div class="cond-card" onclick="selectCond2(this,'minimalista')">
+          <input type="radio" name="estilo-web" value="minimalista">
+          <div class="cond-card-label">Minimalista</div>
+          <div class="cond-card-desc">Limpio, espacioso, elegante</div>
+        </div>
+        <div class="cond-card" onclick="selectCond2(this,'colorido')">
+          <input type="radio" name="estilo-web" value="colorido">
+          <div class="cond-card-label">Colorido y dinámico</div>
+          <div class="cond-card-desc">Alegre, llamativo, con fotos</div>
+        </div>
+        <div class="cond-card" onclick="selectCond2(this,'oscuro')">
+          <input type="radio" name="estilo-web" value="oscuro">
+          <div class="cond-card-label">Oscuro / Luxury</div>
+          <div class="cond-card-desc">Fondo oscuro, premium</div>
+        </div>
+        <div class="cond-card" onclick="selectCond2(this,'neutro')">
+          <input type="radio" name="estilo-web" value="neutro">
+          <div class="cond-card-label">Neutro y profesional</div>
+          <div class="cond-card-desc">Clásico, confiable, serio</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Sitios web de referencia que te gustan <span class="opt">(opcional)</span></label>
+      <textarea id="web-referencia" placeholder="Pegá URLs o describí agencias / marcas cuyo sitio te gusta y por qué. Esto nos ayuda mucho a alinear la estética." style="min-height:70px"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Fotos propias para el sitio <span class="opt">(recomendado)</span></label>
+      <div class="file-drop">
+        <input type="file" id="fotos-web" name="fotos_web" accept="image/*" multiple onchange="handleFile(this,'fotos-web-name')">
+        <div class="file-drop-icon">🖼️</div>
+        <p><strong>Subí tus fotos de viajes o de la agencia</strong><br>JPG, PNG · Podés subir varias a la vez</p>
+        <div class="file-name" id="fotos-web-name"></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Texto "Sobre mí" <span class="opt">(si ya lo tenés redactado)</span></label>
+      <textarea id="sobre-mi" placeholder="Contá tu historia como agente, por qué te apasiona el turismo, cuántos años de experiencia tenés... Si no lo tenés, lo redactamos juntos." style="min-height:100px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(4)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 5 de 8</span>
+        <button class="btn btn-primary" onclick="next(4)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 6: EMAIL PROFESIONAL ── -->
+  <div class="section" id="sec-5">
+    <div class="section-header">
+      <div class="section-icon">📧</div>
+      <div>
+        <div class="section-title">Email Profesional</div>
+        <div class="section-subtitle">Tu cuenta con dominio propio, lista desde el día de entrega</div>
+        <div class="section-tag">Sección 6 de 8</div>
+      </div>
+    </div>
+
+    <div class="hint">
+      Tu email profesional quedará en el formato <strong>vos@tudominio.com</strong>. Se configura junto con el sitio web para que todo esté integrado.
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Email profesional deseado <span class="req">*</span></label>
+        <input type="text" id="email-prof" placeholder="Ej: hola@ · contacto@ · reservas@">
+      </div>
+      <div class="field-group">
+        <label>¿Querés más de una cuenta?</label>
+        <select id="cant-emails">
+          <option value="1">Solo una cuenta (hola@dominio)</option>
+          <option value="2">Dos cuentas (hola@ + info@)</option>
+          <option value="mas">Más de dos (lo hablamos en el kick-off)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Email actual que usás hoy <span class="opt">(para migrar historial si querés)</span></label>
+      <input type="email" id="email-actual" placeholder="tucuenta@gmail.com · hotmail.com · etc.">
+    </div>
+
+    <div class="divider"></div>
+
+    <label style="margin-bottom:14px">Elementos que querés en tu firma de mail <span class="req">*</span></label>
+    <div class="toggle-row" id="firma-logo-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Logo de la agencia</div>
+        <div class="toggle-desc">Aparece en el encabezado de la firma</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row" id="firma-foto-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Foto de perfil del agente</div>
+        <div class="toggle-desc">Tu foto profesional en la firma</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row" id="firma-redes-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Íconos de redes sociales</div>
+        <div class="toggle-desc">Links a Instagram, Facebook, etc.</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row" id="firma-wa-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Botón de WhatsApp</div>
+        <div class="toggle-desc">Link directo para que te escriban</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row" id="firma-slogan-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Slogan o frase de marca</div>
+        <div class="toggle-desc">Debajo del nombre o la empresa</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+
+    <div class="field-group" style="margin-top:20px">
+      <label>Firma actual o texto base <span class="opt">(si tenés algo para mantener)</span></label>
+      <textarea id="firma-texto" placeholder="Pegá tu firma actual o describí cómo querés que quede. Nombre, cargo, teléfono, legales, etc."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Foto para la firma <span class="opt">(opcional pero recomendada)</span></label>
+      <div class="file-drop">
+        <input type="file" id="foto-firma" name="foto_firma" accept="image/*" onchange="handleFile(this,'foto-firma-name')">
+        <div class="file-drop-icon">🤳</div>
+        <p><strong>Foto profesional tuya</strong><br>JPG o PNG · Cara visible, fondo limpio ideal</p>
+        <div class="file-name" id="foto-firma-name"></div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(5)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 6 de 8</span>
+        <button class="btn btn-primary" onclick="next(5)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 7: INSTAGRAM ── -->
+  <div class="section" id="sec-6">
+    <div class="section-header">
+      <div class="section-icon">📸</div>
+      <div>
+        <div class="section-title">Instagram Automatizado</div>
+        <div class="section-subtitle">Para que tu perfil capture leads mientras dormís</div>
+        <div class="section-tag">Sección 7 de 8</div>
+      </div>
+    </div>
+
+    <div class="hint-gold">
+      <strong>¿Cómo funciona?</strong> Configuramos respuestas automáticas para que cuando alguien comente o te escriba por Instagram, reciba una respuesta inmediata y quede registrado en tu TASS.
+    </div>
+
+    <div class="field-group">
+      <label>Usuario de Instagram de la agencia <span class="req">*</span></label>
+      <input type="text" id="instagram-user" placeholder="@tuagencia · sin el arroba también">
+    </div>
+
+    <div class="field-group">
+      <label>Estado actual de tu perfil <span class="req">*</span></label>
+      <div class="cond-cards">
+        <div class="cond-card" onclick="selectCond3(this,'activo')">
+          <input type="radio" name="ig-estado" value="activo">
+          <div class="cond-card-label">Activo y con contenido</div>
+          <div class="cond-card-desc">Publicás regularmente</div>
+        </div>
+        <div class="cond-card" onclick="selectCond3(this,'irregular')">
+          <input type="radio" name="ig-estado" value="irregular">
+          <div class="cond-card-label">Irregular</div>
+          <div class="cond-card-desc">Publicás de vez en cuando</div>
+        </div>
+        <div class="cond-card" onclick="selectCond3(this,'nuevo')">
+          <input type="radio" name="ig-estado" value="nuevo">
+          <div class="cond-card-label">Cuenta nueva / vacía</div>
+          <div class="cond-card-desc">Recién empezando</div>
+        </div>
+        <div class="cond-card" onclick="selectCond3(this,'no-tengo')">
+          <input type="radio" name="ig-estado" value="no-tengo">
+          <div class="cond-card-label">No tengo Instagram</div>
+          <div class="cond-card-desc">Hay que crear el perfil</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <label style="margin-bottom:14px">Flujos de automatización que querés activar <span class="req">*</span></label>
+
+    <div class="toggle-row active" id="ig-dm-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Respuesta automática a DMs</div>
+        <div class="toggle-desc">Cuando alguien te escribe por primera vez</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row active" id="ig-comentarios-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Respuesta a comentarios con palabra clave</div>
+        <div class="toggle-desc">Ej: "INFO" → recibe el detalle por DM</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row" id="ig-story-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Respuesta a reacciones en Stories</div>
+        <div class="toggle-desc">Cuando alguien reacciona a tus historias</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+    <div class="toggle-row" id="ig-bienvenida-toggle" onclick="toggleRow(this)">
+      <div>
+        <div class="toggle-label">Mensaje de bienvenida a nuevos seguidores</div>
+        <div class="toggle-desc">Auto-DM cuando alguien te sigue</div>
+      </div>
+      <div class="toggle-switch"></div>
+    </div>
+
+    <div class="field-group" style="margin-top:20px">
+      <label>Palabras clave que querés activar respuestas <span class="opt">(opcional)</span></label>
+      <input type="text" id="palabras-clave" placeholder="Ej: INFO · PRECIO · CARIBE · VIAJE · COTIZACIÓN">
+    </div>
+
+    <div class="field-group">
+      <label>Tono de las respuestas automáticas <span class="req">*</span></label>
+      <div class="cards-3">
+        <div class="card-opt" onclick="selectCard(this,'tono-ig')">
+          <input type="radio" name="tono-ig" value="formal">
+          <div class="card-opt-icon">👔</div>
+          <div class="card-opt-label">Formal</div>
+          <div class="card-opt-desc">Profesional y serio</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'tono-ig')">
+          <input type="radio" name="tono-ig" value="amigable">
+          <div class="card-opt-icon">😊</div>
+          <div class="card-opt-label">Amigable</div>
+          <div class="card-opt-desc">Cálido y cercano</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'tono-ig')">
+          <input type="radio" name="tono-ig" value="divertido">
+          <div class="card-opt-icon">🎉</div>
+          <div class="card-opt-label">Divertido</div>
+          <div class="card-opt-desc">Dinámico con emojis</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Mensaje de bienvenida personalizado <span class="opt">(opcional)</span></label>
+      <textarea id="mensaje-bienvenida" placeholder="Ej: ¡Hola! 👋 Gracias por escribirnos. Somos [Agencia], tu agencia de confianza para viajar. ¿En qué podemos ayudarte?" style="min-height:80px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(6)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 7 de 8</span>
+        <button class="btn btn-primary" onclick="next(6)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 8: ASESORÍA ── -->
+  <div class="section" id="sec-7">
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <div>
+        <div class="section-title">Asesoría Estratégica</div>
+        <div class="section-subtitle">Para que la primera sesión sea de máximo impacto</div>
+        <div class="section-tag">Sección 8 de 8</div>
+      </div>
+    </div>
+
+    <div class="hint-gold">
+      <strong>Primera sesión incluida en tu plan Elite.</strong> Esta información nos ayuda a preparar una asesoría enfocada en lo que más necesita tu agencia.
+    </div>
+
+    <div class="field-group">
+      <label>Principal desafío de tu agencia hoy <span class="req">*</span></label>
+      <div class="cards-3">
+        <div class="card-opt" onclick="selectCard(this,'desafio')">
+          <input type="radio" name="desafio" value="conseguir-clientes">
+          <div class="card-opt-icon">🎯</div>
+          <div class="card-opt-label">Conseguir clientes</div>
+          <div class="card-opt-desc">Más leads y consultas</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'desafio')">
+          <input type="radio" name="desafio" value="cerrar-ventas">
+          <div class="card-opt-icon">🤝</div>
+          <div class="card-opt-label">Cerrar ventas</div>
+          <div class="card-opt-desc">Convertir consultas en reservas</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'desafio')">
+          <input type="radio" name="desafio" value="organizacion">
+          <div class="card-opt-icon">📋</div>
+          <div class="card-opt-label">Organización</div>
+          <div class="card-opt-desc">Tener todo bajo control</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'desafio')">
+          <input type="radio" name="desafio" value="imagen">
+          <div class="card-opt-icon">✨</div>
+          <div class="card-opt-label">Imagen y presencia</div>
+          <div class="card-opt-desc">Verse más profesional</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'desafio')">
+          <input type="radio" name="desafio" value="tiempo">
+          <div class="card-opt-icon">⏰</div>
+          <div class="card-opt-label">Falta de tiempo</div>
+          <div class="card-opt-desc">Automatizar tareas repetitivas</div>
+        </div>
+        <div class="card-opt" onclick="selectCard(this,'desafio')">
+          <input type="radio" name="desafio" value="otro">
+          <div class="card-opt-icon">💬</div>
+          <div class="card-opt-label">Otro</div>
+          <div class="card-opt-desc">Lo cuento abajo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Objetivo principal para los próximos 6 meses <span class="req">*</span></label>
+      <textarea id="objetivo-6m" placeholder="Ej: Llegar a 5 reservas mensuales · Armar un nicho en viajes de lunas de miel · Poder vivir solo de la agencia sin trabajo en relación de dependencia..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>¿Qué aspectos querés trabajar en la primera sesión de asesoría? <span class="opt">(opcional)</span></label>
+      <div class="chips-wrap" id="asesoria-chips">
+        <div class="chip" onclick="toggleChip(this)">Estrategia de precios</div>
+        <div class="chip" onclick="toggleChip(this)">Proceso de ventas</div>
+        <div class="chip" onclick="toggleChip(this)">Marketing digital</div>
+        <div class="chip" onclick="toggleChip(this)">Nichos y especialización</div>
+        <div class="chip" onclick="toggleChip(this)">Métricas y seguimiento</div>
+        <div class="chip" onclick="toggleChip(this)">Cómo usar el sistema TASS</div>
+        <div class="chip" onclick="toggleChip(this)">Fidelización de clientes</div>
+        <div class="chip" onclick="toggleChip(this)">Alianzas con proveedores</div>
+        <div class="chip" onclick="toggleChip(this)">Plan de contenido para Instagram</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Hay algo más que debamos saber para configurar tu ecosistema? <span class="opt">(opcional)</span></label>
+      <textarea id="notas-extra" placeholder="Cualquier detalle especial, flujo de trabajo particular, herramientas que ya usás, clientes con características especiales, etc."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Disponibilidad para el Kick-off (Reunión 1) <span class="req">*</span></label>
+      <textarea id="disponibilidad" placeholder="Ej: Lunes a viernes de 10 a 18 hs · También sábados a la mañana · Prefiero Google Meet" style="min-height:70px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(7)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Sección 8 de 8</span>
+        <button class="btn btn-submit" onclick="submit()">Enviar formulario Elite ★</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ── -->
+  <div class="success-screen" id="success">
+    <div class="success-icon">🌟</div>
+    <h2>¡Bienvenida al<br><em>TASS Elite!</em></h2>
+    <p>Recibimos tu formulario completo. El equipo TASS tiene todo lo que necesita para construir tu ecosistema profesional.</p>
+    <div class="success-steps">
+      <div class="success-step">
+        <div class="ss-num">1</div>
+        <div>
+          <div>Revisamos tu formulario</div>
+          <div class="ss-detail">Hoy o el próximo día hábil</div>
+        </div>
+      </div>
+      <div class="success-step">
+        <div class="ss-num">2</div>
+        <div>
+          <div>Kick-off de estrategia · Día 2</div>
+          <div class="ss-detail">Google Meet de 60 min para diseñar el proyecto</div>
+        </div>
+      </div>
+      <div class="success-step">
+        <div class="ss-num">3</div>
+        <div>
+          <div>Sistema base + web + email · Días 6-14</div>
+          <div class="ss-detail">Primera versión lista para revisar</div>
+        </div>
+      </div>
+      <div class="success-step">
+        <div class="ss-num">4</div>
+        <div>
+          <div>Onboarding Elite · Días 43-45</div>
+          <div class="ss-detail">Entrega completa + primera sesión de asesoría</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px">¿Preguntas? Escribinos por WhatsApp. 🚀</p>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  let current = 0;
+  const TOTAL = 8;
+
+  function updateProgress(n) {
+    const pct = Math.round(((n + 1) / TOTAL) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    // update step states
+    document.querySelectorAll('.h-step').forEach((s, i) => {
+      s.classList.remove('active','done');
+      if (i === n) s.classList.add('active');
+      else if (i < n) s.classList.add('done');
+    });
+  }
+
+  function goTo(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + n).classList.add('active');
+    current = n;
+    updateProgress(n);
+    window.scrollTo({top: 0, behavior:'smooth'});
+  }
+
+  function next(from) {
+    if (from === 0) {
+      const nombre = document.getElementById('nombre').value.trim();
+      const email  = document.getElementById('email').value.trim();
+      const tel    = document.getElementById('telefono').value.trim();
+      const pais   = document.getElementById('pais').value.trim();
+      if (!nombre || !email || !tel || !pais) {
+        alert('Por favor completá nombre, email, teléfono y ciudad antes de continuar.');
+        return;
+      }
+    }
+    if (from < TOTAL - 1) goTo(from + 1);
+  }
+
+  function prev(from) {
+    if (from > 0) goTo(from - 1);
+  }
+
+  function toggleChip(el) { el.classList.toggle('selected'); }
+
+  function selectCond(card, val) {
+    document.querySelectorAll('[name=cond]').forEach(r => r.closest('.cond-card').classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+  function selectCond2(card, val) {
+    document.querySelectorAll('[name=estilo-web]').forEach(r => r.closest('.cond-card').classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+  function selectCond3(card, val) {
+    document.querySelectorAll('[name=ig-estado]').forEach(r => r.closest('.cond-card').classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+  function selectCard(card, name) {
+    document.querySelectorAll('[name=' + name + ']').forEach(r => r.closest('.card-opt').classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+
+  function toggleRow(el) { el.classList.toggle('active'); }
+
+  function syncColor(pickId, hexId) {
+    document.getElementById(hexId).value = document.getElementById(pickId).value;
+  }
+  function syncHex(hexId, pickId) {
+    const val = document.getElementById(hexId).value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) document.getElementById(pickId).value = val;
+  }
+
+  function handleFile(input, nameId) {
+    const el = document.getElementById(nameId);
+    if (input.files[0]) {
+      const count = input.files.length > 1 ? ` (${input.files.length} archivos)` : '';
+      el.textContent = '✓ ' + input.files[0].name + count;
+      el.style.display = 'block';
+    }
+  }
+
+  function mostrarAdjunto() {
+    const val = document.getElementById('tiene-plantillas').value;
+    const wrap = document.getElementById('adjuntar-plantilla-wrap');
+    wrap.style.display = (val && val !== 'no' && val !== 'mental') ? 'block' : 'none';
+  }
+
+  function getToggles(prefix, ids) {
+    return ids.filter(id => document.getElementById(id).classList.contains('active'))
+              .map(id => document.getElementById(id).querySelector('.toggle-label').textContent)
+              .join(', ');
+  }
+
+  async function submit() {
+    const disp = document.getElementById('disponibilidad').value.trim();
+    const obj  = document.getElementById('objetivo-6m').value.trim();
+    if (!disp) { alert('Por favor indicá tu disponibilidad para el kick-off.'); return; }
+    if (!obj)  { alert('Por favor completá tu objetivo para los próximos 6 meses.'); return; }
+
+    const chips = id => [...document.querySelectorAll('#' + id + ' .chip.selected')].map(c => c.textContent).join(', ');
+    const radio = name => document.querySelector('[name=' + name + ']:checked')?.value || '';
+
+    const firmaElems  = getToggles('firma', ['firma-logo-toggle','firma-foto-toggle','firma-redes-toggle','firma-wa-toggle','firma-slogan-toggle']);
+    const igFlujos    = getToggles('ig',    ['ig-dm-toggle','ig-comentarios-toggle','ig-story-toggle','ig-bienvenida-toggle']);
+
+    const payload = {
+      // Sección 1
+      nombre:               document.getElementById('nombre').value,
+      agencia:              document.getElementById('agencia').value,
+      email:                document.getElementById('email').value,
+      _replyto:             document.getElementById('email').value,
+      telefono:             document.getElementById('telefono').value,
+      web_actual:           document.getElementById('web-actual').value,
+      pais:                 document.getElementById('pais').value,
+      origen:               document.getElementById('origen').value,
+      // Sección 2
+      color_principal:      document.getElementById('color1-hex').value || document.getElementById('color1-pick').value,
+      color_secundario:     document.getElementById('color2-hex').value || document.getElementById('color2-pick').value,
+      color_acento:         document.getElementById('color3-hex').value || document.getElementById('color3-pick').value,
+      slogan:               document.getElementById('slogan').value,
+      descripcion_agencia:  document.getElementById('descripcion-agencia').value,
+      estilo_visual:        document.getElementById('estilo-visual').value,
+      // Sección 3
+      destinos:             chips('destinos-chips'),
+      otros_destinos:       document.getElementById('otros-destinos').value,
+      especialidad:         document.getElementById('especialidad').value,
+      perfil_cliente:       radio('perfil'),
+      // Sección 4
+      tipo_presupuestos:    document.getElementById('tipo-presupuestos').value,
+      tiene_plantillas:     document.getElementById('tiene-plantillas').value,
+      condicion_pago:       radio('cond'),
+      medios_de_pago:       chips('medios-chips'),
+      cantidad_clientes:    document.getElementById('cantidad-clientes').value,
+      herramientas:         chips('herramientas-chips'),
+      // Sección 5
+      dominio:              document.getElementById('dominio').value,
+      tiene_dominio:        document.getElementById('tiene-dominio').value,
+      secciones_web:        chips('secciones-web-chips'),
+      estilo_web:           radio('estilo-web'),
+      web_referencia:       document.getElementById('web-referencia').value,
+      sobre_mi:             document.getElementById('sobre-mi').value,
+      // Sección 6
+      email_profesional:    document.getElementById('email-prof').value,
+      cantidad_emails:      document.getElementById('cant-emails').value,
+      email_actual:         document.getElementById('email-actual').value,
+      firma_elementos:      firmaElems,
+      firma_texto:          document.getElementById('firma-texto').value,
+      // Sección 7
+      instagram_user:       document.getElementById('instagram-user').value,
+      ig_estado:            radio('ig-estado'),
+      ig_flujos:            igFlujos,
+      palabras_clave:       document.getElementById('palabras-clave').value,
+      tono_ig:              radio('tono-ig'),
+      mensaje_bienvenida:   document.getElementById('mensaje-bienvenida').value,
+      // Sección 8
+      desafio_principal:    radio('desafio'),
+      objetivo_6m:          obj,
+      temas_asesoria:       chips('asesoria-chips'),
+      notas_extra:          document.getElementById('notas-extra').value,
+      disponibilidad:       disp,
+    };
+    const formData = new FormData();
+
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
+      formData.append('subject', 'Nueva implementación TASS Elite ★ — ' + (document.getElementById('nombre').value || '') + ' · ' + (document.getElementById('agencia').value || ''));
+      formData.append('from_name', 'Formulario TASS Elite');
+      formData.append('replyto', document.getElementById('email').value);
+      formData.append('botcheck', 'false');
+
+      Object.entries(payload).forEach(([key, value]) => {
+        formData.append(key, value || '');
+      });
+
+      const logoFile = document.getElementById('logo').files[0];
+      if (logoFile) formData.append('logo', logoFile);
+
+      const logoDarkFile = document.getElementById('logo-dark').files[0];
+      if (logoDarkFile) formData.append('logo_dark', logoDarkFile);
+
+      const plantillaFile = document.getElementById('plantilla').files[0];
+      if (plantillaFile) formData.append('plantilla', plantillaFile);
+
+      const firmaFile = document.getElementById('foto-firma').files[0];
+      if (firmaFile) formData.append('foto_firma', firmaFile);
+
+      const fotosWebFiles = document.getElementById('fotos-web').files;
+      for (const file of fotosWebFiles) {
+        formData.append('fotos_web[]', file);
+      }
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (res.ok) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('success').classList.add('show');
+        document.getElementById('progress-fill').style.width = '100%';
+        document.getElementById('progress-pct').textContent = '100%';
+        window.scrollTo({top: 0, behavior:'smooth'});
+      } else {
+        throw new Error('Error al enviar');
+      }
+    } catch(e) {
+      btn.textContent = 'Enviar formulario Elite ★';
+      btn.disabled = false;
+      alert('Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
+    }
+  }
+
+  // Drag-over effect
+  document.querySelectorAll('.file-drop').forEach(drop => {
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+    drop.addEventListener('drop', () => drop.classList.remove('dragover'));
+  });
+
+  // Init progress
+  updateProgress(0);
+</script>
+</body>
+</html>

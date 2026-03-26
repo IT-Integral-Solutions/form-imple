@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TASS · Formulario de Implementación</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B3E;
+    --teal: #00B4D8;
+    --teal-light: #E8F8FC;
+    --gold: #F4A623;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-300: #CBD5E1;
+    --gray-500: #64748B;
+    --gray-700: #334155;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-700);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(0,180,216,0.12);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(244,166,35,0.08);
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 44px 32px 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .tass-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,180,216,0.18);
+    border: 1px solid rgba(0,180,216,0.35);
+    border-radius: 100px;
+    padding: 5px 14px;
+    margin-bottom: 20px;
+  }
+  .tass-badge span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+  .tass-badge::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.3)}
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 36px);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+  .header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    max-width: 480px;
+  }
+  .header-steps {
+    display: flex;
+    gap: 0;
+    margin-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 20px;
+  }
+  .h-step {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 6px 4px;
+    cursor: pointer;
+    transition: color .2s;
+    position: relative;
+  }
+  .h-step.active { color: var(--teal); }
+  .h-step.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 20%; right: 20%;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+  .h-step-num {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: inherit;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 32px 60px;
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; animation: fadeUp .35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    background: var(--teal-light);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); line-height: 1.2; }
+  .section-subtitle { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+
+  /* ── FIELDS ── */
+  .field-group { margin-bottom: 20px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:540px){ .field-row { grid-template-columns: 1fr; } }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+  label .req { color: var(--teal); margin-left: 2px; }
+  label .opt {
+    font-weight: 400;
+    color: var(--gray-500);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+
+  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--white);
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,180,216,0.12);
+  }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  select { cursor: pointer; }
+  input::placeholder, textarea::placeholder { color: var(--gray-300); }
+
+  /* ── COLOR INPUT ── */
+  .color-row { display: flex; gap: 10px; align-items: center; }
+  .color-row input[type=color] {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    padding: 3px;
+    cursor: pointer;
+    border: 1.5px solid var(--gray-300);
+    flex-shrink: 0;
+  }
+  .color-row input[type=text] { flex: 1; }
+
+  /* ── FILE ── */
+  .file-drop {
+    border: 2px dashed var(--gray-300);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+  }
+  .file-drop:hover, .file-drop.dragover {
+    border-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .file-drop input[type=file] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+  }
+  .file-drop-icon { font-size: 28px; margin-bottom: 8px; }
+  .file-drop p { font-size: 13px; color: var(--gray-500); }
+  .file-drop strong { color: var(--navy); font-weight: 600; }
+  .file-name {
+    display: none;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--teal);
+  }
+
+  /* ── DESTINO CHIPS ── */
+  .chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1.5px solid var(--gray-300);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+    color: var(--gray-500);
+  }
+  .chip.selected {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .chip:hover:not(.selected) {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 24px 0;
+  }
+
+  /* ── HINT BOX ── */
+  .hint {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--navy);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* ── CONDICIONES ── */
+  .cond-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  @media(max-width:540px){ .cond-cards { grid-template-columns: 1fr; } }
+  .cond-card {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+  }
+  .cond-card.selected { border-color: var(--teal); background: var(--teal-light); }
+  .cond-card input[type=radio] { position: absolute; opacity: 0; }
+  .cond-card-label { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+  .cond-card-desc { font-size: 12px; color: var(--gray-500); }
+  .cond-card.selected .cond-card-label { color: var(--teal); }
+
+  /* ── NAVIGATION ── */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .18s;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--gray-500);
+    border: 1.5px solid var(--gray-300);
+  }
+  .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(13,27,62,0.2);
+  }
+  .btn-primary:hover { background: #162550; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(13,27,62,0.28); }
+  .btn-submit {
+    background: var(--teal);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(0,180,216,0.35);
+    padding: 13px 36px;
+    font-size: 15px;
+  }
+  .btn-submit:hover { background: #009fc0; transform: translateY(-1px); }
+
+  .progress-text { font-size: 12px; color: var(--gray-500); }
+
+  /* ── SUCCESS ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    animation: fadeUp .4s ease;
+  }
+  .success-screen.show { display: block; }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: var(--teal-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px;
+    margin: 0 auto 20px;
+  }
+  .success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .success-screen p {
+    font-size: 15px;
+    color: var(--gray-500);
+    line-height: 1.7;
+    max-width: 420px;
+    margin: 0 auto 28px;
+  }
+  .success-steps {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    background: var(--teal-light);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    max-width: 360px;
+    width: 100%;
+  }
+  .success-step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--navy); font-weight: 500; }
+  .ss-num {
+    width: 24px; height: 24px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div style="margin-bottom:20px;">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgNjAiIGZpbGw9Im5vbmUiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMSIgeDE9IjEzIiB5MT0iMTYiIHgyPSIzOSIgeTI9IjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZDRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTczZTgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImcyIiB4MT0iMTMiIHkxPSIyMiIgeDI9IjM5IiB5Mj0iMjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZDRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMjYsMTE1LDIzMiwwLjUpIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0LDExKSBzY2FsZSgxLjApIj4KICAgIDxsaW5lIHgxPSIxMyIgeTE9IjE2IiB4Mj0iMzkiIHkyPSI5IiAgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1kYXNoYXJyYXk9IjIgMiIvPgogICAgPGxpbmUgeDE9IjEzIiB5MT0iMjIiIHgyPSIzOSIgeTI9IjI5IiBzdHJva2U9InVybCgjZzIpIiBzdHJva2Utd2lkdGg9IjEuMiIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+CiAgICA8bGluZSB4MT0iNDQiIHkxPSIxMiIgeDI9IjQ0IiB5Mj0iMjYiIHN0cm9rZT0icmdiYSgwLDIxMiwyNTUsMC4yNSkiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+CiAgICA8Y2lyY2xlIGN4PSI4IiAgY3k9IjE5IiByPSI1IiAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwZDRmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDxjaXJjbGUgY3g9IjgiICBjeT0iMTkiIHI9IjIuNSIgZmlsbD0iIzFhNzNlOCIvPgogICAgPGNpcmNsZSBjeD0iNDQiIGN5PSI3IiAgcj0iNSIgICBmaWxsPSJub25lIiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICA8Y2lyY2xlIGN4PSI0NCIgY3k9IjciICByPSIyLjUiIGZpbGw9IiMxYTczZTgiLz4KICAgIDxjaXJjbGUgY3g9IjQ0IiBjeT0iMzEiIHI9IjUiICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMjEyLDI1NSwwLjUpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPGNpcmNsZSBjeD0iNDQiIGN5PSIzMSIgcj0iMi41IiBmaWxsPSJyZ2JhKDI2LDExNSwyMzIsMC41NSkiLz4KICA8L2c+CiAgPHRleHQgeD0iNjIiIHk9IjM2IiBmb250LWZhbWlseT0iUmFqZGhhbmksUG9wcGlucyxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjI4IiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iI2ZmZmZmZiI+CiAgICA8dHNwYW4gZmlsbD0iIzAwZDRmZiI+SVQ8L3RzcGFuPi1JbnRlZ3JhbAogIDwvdGV4dD4KICA8dGV4dCB4PSI2NCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJQb3BwaW5zLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSIzMDAiIGZvbnQtc2l6ZT0iOSIgbGV0dGVyLXNwYWNpbmc9IjUiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yOCkiPlNPTFVUSU9OUzwvdGV4dD4KPC9zdmc+" alt="IT-Integral Solutions" style="height:40px;display:block;">
+    </div>
+    <div class="tass-badge"><span>TASS · Starter</span></div>
+    <h1>Formulario de<br><em>Implementación</em></h1>
+    <p>Completá estos datos para que podamos configurar tu sistema personalizado. Solo te lleva 10 minutos.</p>
+    <div class="header-steps">
+      <div class="h-step active" onclick="goTo(0)">
+        <span class="h-step-num">1</span>Tus datos
+      </div>
+      <div class="h-step" onclick="goTo(1)">
+        <span class="h-step-num">2</span>Tu marca
+      </div>
+      <div class="h-step" onclick="goTo(2)">
+        <span class="h-step-num">3</span>Producto
+      </div>
+      <div class="h-step" onclick="goTo(3)">
+        <span class="h-step-num">4</span>Condiciones
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ── SECCIÓN 1: DATOS DEL AGENTE ── -->
+  <div class="section active" id="sec-0">
+    <div class="section-header">
+      <div class="section-icon">👤</div>
+      <div>
+        <div class="section-title">Datos del Agente</div>
+        <div class="section-subtitle">Información de contacto y datos de la agencia</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="Ej: María González" required>
+      </div>
+      <div class="field-group">
+        <label>Nombre de la agencia <span class="req">*</span></label>
+        <input type="text" id="agencia" placeholder="Ej: Viajes del Sur">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Email de trabajo <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="hola@tuagencia.com">
+      </div>
+      <div class="field-group">
+        <label>WhatsApp / Teléfono <span class="req">*</span></label>
+        <input type="tel" id="telefono" placeholder="+54 9 11 0000-0000">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Sitio web <span class="opt">(opcional)</span></label>
+      <input type="url" id="web" placeholder="https://tuagencia.com">
+    </div>
+
+    <div class="field-group">
+      <label>País y ciudad donde operás <span class="req">*</span></label>
+      <input type="text" id="pais" placeholder="Ej: Argentina · Buenos Aires">
+    </div>
+
+    <div class="nav">
+      <span class="progress-text">Paso 1 de 4</span>
+      <button class="btn btn-primary" onclick="next(0)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 2: MARCA ── -->
+  <div class="section" id="sec-1">
+    <div class="section-header">
+      <div class="section-icon">🎨</div>
+      <div>
+        <div class="section-title">Identidad de Marca</div>
+        <div class="section-subtitle">Para personalizar el sistema con tu imagen</div>
+      </div>
+    </div>
+
+    <div class="hint">
+      Cuanto más completa sea esta sección, más profesional y alineado a tu marca quedará el sistema.
+    </div>
+
+    <div class="field-group">
+      <label>Logo <span class="req">*</span></label>
+      <div class="file-drop" id="logo-drop">
+        <input type="file" id="logo" name="logo" accept="image/*,.svg,.pdf" onchange="handleFile(this,'logo-name')">
+        <div class="file-drop-icon">📎</div>
+        <p><strong>Subí tu logo</strong><br>PNG, SVG o PDF · Fondo transparente ideal</p>
+        <div class="file-name" id="logo-name"></div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Color principal de tu marca <span class="req">*</span></label>
+      <div class="color-row">
+        <input type="color" id="color1-pick" value="#0D1B3E" oninput="syncColor('color1-pick','color1-hex')">
+        <input type="text" id="color1-hex" placeholder="#0D1B3E" oninput="syncHex('color1-hex','color1-pick')">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Color secundario <span class="opt">(opcional)</span></label>
+      <div class="color-row">
+        <input type="color" id="color2-pick" value="#00B4D8" oninput="syncColor('color2-pick','color2-hex')">
+        <input type="text" id="color2-hex" placeholder="#00B4D8" oninput="syncHex('color2-hex','color2-pick')">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>Firma de mail <span class="opt">(opcional)</span></label>
+      <textarea id="firma" placeholder="Pegá acá el texto de tu firma actual, o describí cómo querés que quede..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Slogan o frase de marca <span class="opt">(opcional)</span></label>
+      <input type="text" id="slogan" placeholder="Ej: Viajá sin límites">
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(1)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 2 de 4</span>
+        <button class="btn btn-primary" onclick="next(1)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: PRODUCTO ── -->
+  <div class="section" id="sec-2">
+    <div class="section-header">
+      <div class="section-icon">✈️</div>
+      <div>
+        <div class="section-title">Tu Producto</div>
+        <div class="section-subtitle">Qué vendés y cómo lo vendés</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Destinos principales que vendés <span class="req">*</span></label>
+      <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Seleccioná todos los que aplican</p>
+      <div class="chips-wrap" id="destinos-chips">
+        <div class="chip" onclick="toggleChip(this)">Caribe</div>
+        <div class="chip" onclick="toggleChip(this)">Europa</div>
+        <div class="chip" onclick="toggleChip(this)">USA / Canadá</div>
+        <div class="chip" onclick="toggleChip(this)">América del Sur</div>
+        <div class="chip" onclick="toggleChip(this)">México</div>
+        <div class="chip" onclick="toggleChip(this)">Asia</div>
+        <div class="chip" onclick="toggleChip(this)">Cruceros</div>
+        <div class="chip" onclick="toggleChip(this)">Luna de miel</div>
+        <div class="chip" onclick="toggleChip(this)">Turismo aventura</div>
+        <div class="chip" onclick="toggleChip(this)">Corporativo</div>
+        <div class="chip" onclick="toggleChip(this)">Patagonia</div>
+        <div class="chip" onclick="toggleChip(this)">África / Safari</div>
+        <div class="chip" onclick="toggleChip(this)">Disney / Orlando</div>
+        <div class="chip" onclick="toggleChip(this)">Universal Studios</div>
+        <div class="chip" onclick="toggleChip(this)">California</div>
+      </div>
+    </div>
+
+    <div class="field-group" style="margin-top:14px">
+      <label>Otros destinos <span class="opt">(opcional)</span></label>
+      <input type="text" id="otros-destinos" placeholder="Ej: Islandia, Japón, Galápagos...">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Qué tipo de presupuestos armás? <span class="req">*</span></label>
+      <textarea id="tipo-presupuestos" placeholder="Ej: Paquetes completos (vuelo + hotel + traslados), solo alojamiento, circuitos guiados..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>¿Tenés plantillas de presupuesto actuales? <span class="req">*</span></label>
+      <select id="tiene-plantillas">
+        <option value="">— Seleccioná —</option>
+        <option value="si-excel">Sí, en Excel / Google Sheets</option>
+        <option value="si-word">Sí, en Word / PDF</option>
+        <option value="si-otro">Sí, en otro formato</option>
+        <option value="no">No, armo cada uno desde cero</option>
+        <option value="mental">Las manejo de memoria / WhatsApp</option>
+      </select>
+    </div>
+
+    <div class="field-group" id="adjuntar-plantilla-wrap" style="display:none">
+      <label>Adjuntá una plantilla de ejemplo <span class="opt">(opcional pero útil)</span></label>
+      <div class="file-drop">
+        <input type="file" id="plantilla" name="plantilla" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx" onchange="handleFile(this,'plantilla-name')">
+        <div class="file-drop-icon">📊</div>
+        <p><strong>Subí una plantilla</strong><br>Excel, Word o PDF</p>
+        <div class="file-name" id="plantilla-name"></div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(2)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 3 de 4</span>
+        <button class="btn btn-primary" onclick="next(2)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 4: CONDICIONES ── -->
+  <div class="section" id="sec-3">
+    <div class="section-header">
+      <div class="section-icon">💳</div>
+      <div>
+        <div class="section-title">Condiciones de Pago</div>
+        <div class="section-subtitle">Las que le ofrecés a tus clientes viajeros</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>¿Cómo cobran tus clientes habitualmente? <span class="req">*</span></label>
+      <div class="cond-cards">
+        <div class="cond-card" onclick="selectCond(this,'seña-saldo')">
+          <input type="radio" name="cond" value="seña-saldo">
+          <div class="cond-card-label">Seña + Saldo</div>
+          <div class="cond-card-desc">Pago en 2 cuotas antes del viaje</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'cuotas')">
+          <input type="radio" name="cond" value="cuotas">
+          <div class="cond-card-label">Cuotas mensuales</div>
+          <div class="cond-card-desc">Plan de pago en varios meses</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'contado')">
+          <input type="radio" name="cond" value="contado">
+          <div class="cond-card-label">Contado total</div>
+          <div class="cond-card-desc">Pago único al reservar</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'mixto')">
+          <input type="radio" name="cond" value="mixto">
+          <div class="cond-card-label">Mixto / Variable</div>
+          <div class="cond-card-desc">Depende del paquete</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Medios de pago que aceptás <span class="req">*</span></label>
+      <div class="chips-wrap" id="medios-chips">
+        <div class="chip" onclick="toggleChip(this)">Transferencia bancaria</div>
+        <div class="chip" onclick="toggleChip(this)">MercadoPago</div>
+        <div class="chip" onclick="toggleChip(this)">Tarjeta de crédito</div>
+        <div class="chip" onclick="toggleChip(this)">Tarjeta de débito</div>
+        <div class="chip" onclick="toggleChip(this)">Efectivo</div>
+        <div class="chip" onclick="toggleChip(this)">PayPal</div>
+        <div class="chip" onclick="toggleChip(this)">Cripto</div>
+        <div class="chip" onclick="toggleChip(this)">Western Union</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Hay algo más que debamos saber para configurar tu sistema?</label>
+      <textarea id="notas-extra" placeholder="Cualquier detalle especial, flujo de trabajo particular, herramientas que ya usás, etc."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Disponibilidad para la videollamada de onboarding <span class="req">*</span></label>
+      <textarea id="disponibilidad" placeholder="Ej: Lunes a viernes de 10 a 18 hs · Prefiero Zoom" style="min-height:70px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(3)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 4 de 4</span>
+        <button class="btn btn-submit" onclick="submit()">Enviar formulario ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ── -->
+  <div class="success-screen" id="success">
+    <div class="success-icon">🎉</div>
+    <h2>¡Todo listo!</h2>
+    <p>Recibimos tu formulario. El equipo TASS tiene todo lo que necesita para comenzar la configuración de tu sistema.</p>
+    <div class="success-steps">
+      <div class="success-step"><div class="ss-num">1</div>Revisamos tu formulario (hoy)</div>
+      <div class="success-step"><div class="ss-num">2</div>Comenzamos la configuración (15–20 días hábiles)</div>
+      <div class="success-step"><div class="ss-num">3</div>Te contactamos para la videollamada de entrega</div>
+    </div>
+    <p style="font-size:13px">¿Preguntas? Escribinos por WhatsApp.</p>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+  let current = 0;
+
+  function goTo(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.h-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + n).classList.add('active');
+    document.querySelectorAll('.h-step')[n].classList.add('active');
+    current = n;
+    window.scrollTo({top: 0, behavior:'smooth'});
+  }
+
+  function next(from) {
+    if (from === 0) {
+      const nombre = document.getElementById('nombre').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const tel = document.getElementById('telefono').value.trim();
+      if (!nombre || !email || !tel) {
+        alert('Por favor completá nombre, email y teléfono antes de continuar.');
+        return;
+      }
+    }
+    if (from < 3) goTo(from + 1);
+  }
+
+  function prev(from) {
+    if (from > 0) goTo(from - 1);
+  }
+
+  function toggleChip(el) {
+    el.classList.toggle('selected');
+  }
+
+  function selectCond(card, val) {
+    document.querySelectorAll('.cond-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+
+  function syncColor(pickId, hexId) {
+    document.getElementById(hexId).value = document.getElementById(pickId).value;
+  }
+  function syncHex(hexId, pickId) {
+    const val = document.getElementById(hexId).value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+      document.getElementById(pickId).value = val;
+    }
+  }
+
+  function handleFile(input, nameId) {
+    const el = document.getElementById(nameId);
+    if (input.files[0]) {
+      el.textContent = '✓ ' + input.files[0].name;
+      el.style.display = 'block';
+    }
+  }
+
+  // Show/hide plantilla upload based on select
+  document.getElementById('tiene-plantillas').addEventListener('change', function() {
+    const wrap = document.getElementById('adjuntar-plantilla-wrap');
+    wrap.style.display = (this.value && this.value !== 'no' && this.value !== 'mental') ? 'block' : 'none';
+  });
+
+  async function submit() {
+    const disp = document.getElementById('disponibilidad').value.trim();
+    if (!disp) {
+      alert('Por favor indicá tu disponibilidad para la videollamada.');
+      return;
+    }
+
+    // Collect chips
+    const destinos = [...document.querySelectorAll('#destinos-chips .chip.selected')].map(c => c.textContent).join(', ');
+    const medios   = [...document.querySelectorAll('#medios-chips .chip.selected')].map(c => c.textContent).join(', ');
+    const condPago = document.querySelector('.cond-card.selected')?.querySelector('.cond-card-label')?.textContent || '';
+
+    const payload = {
+      nombre:               document.getElementById('nombre').value,
+      agencia:              document.getElementById('agencia').value,
+      email:                document.getElementById('email').value,
+      _replyto:             document.getElementById('email').value,
+      telefono:             document.getElementById('telefono').value,
+      web:                  document.getElementById('web').value,
+      pais:                 document.getElementById('pais').value,
+      color_principal:      document.getElementById('color1-hex').value || document.getElementById('color1-pick').value,
+      color_secundario:     document.getElementById('color2-hex').value || document.getElementById('color2-pick').value,
+      slogan:               document.getElementById('slogan').value,
+      firma:                document.getElementById('firma').value,
+      destinos_principales: destinos,
+      otros_destinos:       document.getElementById('otros-destinos').value,
+      tipo_presupuestos:    document.getElementById('tipo-presupuestos').value,
+      tiene_plantillas:     document.getElementById('tiene-plantillas').value,
+      condicion_pago:       condPago,
+      medios_de_pago:       medios,
+      notas_extra:          document.getElementById('notas-extra').value,
+      disponibilidad:       disp,
+    };
+    const formData = new FormData();
+
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
+      formData.append('subject', 'Nueva implementación TASS Starter — ' + (document.getElementById('nombre').value || ''));
+      formData.append('from_name', 'Formulario TASS');
+      formData.append('replyto', document.getElementById('email').value);
+      formData.append('botcheck', 'false');
+
+      Object.entries(payload).forEach(([key, value]) => {
+        formData.append(key, value || '');
+      });
+
+      const logoFile = document.getElementById('logo').files[0];
+      if (logoFile) formData.append('logo', logoFile);
+
+      const plantillaFile = document.getElementById('plantilla').files[0];
+      if (plantillaFile) formData.append('plantilla', plantillaFile);
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (res.ok) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.h-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('success').classList.add('show');
+        window.scrollTo({top: 0, behavior:'smooth'});
+      } else {
+        throw new Error('Error al enviar');
+      }
+    } catch(e) {
+      btn.textContent = 'Enviar formulario ✓';
+      btn.disabled = false;
+      alert('Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
+    }
+  }
+
+  // Drag-over effect on file drops
+  document.querySelectorAll('.file-drop').forEach(drop => {
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+    drop.addEventListener('drop', () => drop.classList.remove('dragover'));
+  });
+</script>
+</body>
+</html>

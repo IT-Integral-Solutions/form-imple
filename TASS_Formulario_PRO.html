@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TASS · Formulario de Implementación PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B3E;
+    --navy-mid: #152647;
+    --teal: #00B4D8;
+    --teal-light: #E8F8FC;
+    --teal-glow: rgba(0,180,216,0.15);
+    --gold: #F4A623;
+    --gold-light: rgba(244,166,35,0.12);
+    --pro: #7C3AED;
+    --pro-light: rgba(124,58,237,0.1);
+    --pro-glow: rgba(124,58,237,0.2);
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1;
+    --gray-500: #64748B;
+    --gray-700: #334155;
+    --white: #ffffff;
+    --success: #10B981;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-700);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -50px; left: 25%;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,180,216,0.12) 0%, transparent 70%);
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 44px 32px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo-wrap { margin-bottom: 24px; }
+
+  .tass-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.4);
+    border-radius: 100px;
+    padding: 5px 14px;
+    margin-bottom: 20px;
+  }
+  .tass-badge span {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #a78bfa;
+    text-transform: uppercase;
+  }
+  .tass-badge::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: #a78bfa;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(167,139,250,0.8);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.4)}
+  }
+
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 38px);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: #a78bfa;
+  }
+  .header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+
+  /* PRO badge highlight */
+  .pro-highlight {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(0,180,216,0.15));
+    border: 1px solid rgba(124,58,237,0.35);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-bottom: 24px;
+  }
+  .pro-highlight-icon { font-size: 18px; }
+  .pro-highlight-text { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.4; }
+  .pro-highlight-text strong { color: #a78bfa; display: block; font-size: 13px; margin-bottom: 1px; }
+
+  /* Steps header */
+  .header-steps {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 20px;
+    overflow-x: auto;
+  }
+  .h-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 8px 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .2s;
+    position: relative;
+  }
+  .h-step:not(:last-child)::after {
+    content: '›';
+    margin-left: 16px;
+    color: rgba(255,255,255,0.15);
+  }
+  .h-step.active { color: #a78bfa; }
+  .h-step.done { color: var(--teal); }
+  .h-step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+    transition: all .2s;
+  }
+  .h-step.active .h-step-num {
+    background: #7C3AED;
+    color: white;
+  }
+  .h-step.done .h-step-num {
+    background: var(--teal);
+    color: white;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  .section { display: none; animation: fadeUp .35s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    background: var(--navy);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); line-height: 1.2; }
+  .section-subtitle { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+
+  /* PRO section badge */
+  .pro-section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--pro-light);
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--pro);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+
+  .field-group { margin-bottom: 20px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:540px){ .field-row { grid-template-columns: 1fr; } }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 7px;
+  }
+  .req { color: #EF4444; margin-left: 2px; }
+  .opt { color: var(--gray-300); font-weight: 400; font-size: 12px; margin-left: 4px; }
+
+  input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--gray-700);
+    background: var(--white);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--pro);
+    box-shadow: 0 0 0 3px var(--pro-glow);
+  }
+  select { cursor: pointer; }
+  input::placeholder, textarea::placeholder { color: var(--gray-300); }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+  /* Color picker */
+  .color-row { display: flex; align-items: center; gap: 10px; }
+  .color-row input[type=color] {
+    width: 48px; height: 44px;
+    padding: 3px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .color-row input[type=text] { flex: 1; }
+
+  /* File drop */
+  .file-drop {
+    border: 2px dashed var(--gray-200);
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+    background: var(--gray-50);
+  }
+  .file-drop:hover { border-color: var(--pro); background: var(--pro-light); }
+  .file-drop.dragover { border-color: var(--pro); background: var(--pro-light); }
+  .file-drop input[type=file] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+  .file-drop-icon { font-size: 28px; margin-bottom: 8px; }
+  .file-drop p { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+  .file-drop p strong { color: var(--gray-700); }
+  .file-name { font-size: 12px; color: var(--success); margin-top: 8px; display: none; font-weight: 600; }
+
+  /* Chips */
+  .chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 7px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 100px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    user-select: none;
+    background: white;
+  }
+  .chip.selected {
+    background: var(--pro-light);
+    border-color: var(--pro);
+    color: var(--pro);
+    font-weight: 600;
+  }
+  .chip:hover:not(.selected) { border-color: var(--gray-300); background: var(--gray-50); }
+
+  /* Cond cards */
+  .cond-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media(max-width:480px){ .cond-cards { grid-template-columns: 1fr; } }
+  .cond-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative;
+    background: white;
+  }
+  .cond-card:hover { border-color: var(--gray-300); }
+  .cond-card.selected { border-color: var(--pro); background: var(--pro-light); }
+  .cond-card input[type=radio] { position: absolute; opacity: 0; }
+  .cond-card-label { font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 3px; }
+  .cond-card.selected .cond-card-label { color: var(--pro); }
+  .cond-card-desc { font-size: 12px; color: var(--gray-500); }
+
+  /* Module cards — nuevo en PRO */
+  .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media(max-width:480px){ .module-grid { grid-template-columns: 1fr; } }
+  .module-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 16px;
+    background: white;
+    transition: all .15s;
+  }
+  .module-card.included {
+    border-color: rgba(16,185,129,0.4);
+    background: rgba(16,185,129,0.04);
+  }
+  .module-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .module-icon { font-size: 20px; }
+  .module-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+  .module-desc { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
+  .module-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 100px;
+    margin-bottom: 8px;
+  }
+  .module-badge.included { background: rgba(16,185,129,0.12); color: var(--success); }
+  .module-badge.pro-only { background: var(--pro-light); color: var(--pro); }
+
+  /* Range slider */
+  .range-wrap { display: flex; align-items: center; gap: 14px; }
+  input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--gray-200);
+    outline: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--pro);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(124,58,237,0.4);
+  }
+  .range-val {
+    font-size: 15px; font-weight: 700;
+    color: var(--pro); min-width: 40px;
+    text-align: right;
+  }
+
+  /* Hint */
+  .hint {
+    background: rgba(0,180,216,0.06);
+    border: 1px solid rgba(0,180,216,0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .hint-pro {
+    background: var(--pro-light);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #6D28D9;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .hint-pro strong { color: var(--pro); }
+
+  .divider { height: 1px; background: var(--gray-100); margin: 24px 0; }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .progress-text { font-size: 12px; color: var(--gray-300); }
+
+  .btn {
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--gray-500);
+    border: 1.5px solid var(--gray-200);
+  }
+  .btn-ghost:hover { background: var(--gray-100); }
+  .btn-primary {
+    background: var(--pro);
+    color: white;
+    box-shadow: 0 4px 14px rgba(124,58,237,0.3);
+  }
+  .btn-primary:hover { background: #6D28D9; transform: translateY(-1px); }
+  .btn-submit {
+    background: linear-gradient(135deg, #7C3AED, #00B4D8);
+    color: white;
+    padding: 13px 28px;
+    font-size: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(124,58,237,0.35);
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    transition: all .2s;
+  }
+  .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(124,58,237,0.45); }
+  .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+  /* Success */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+    animation: fadeUp .5s ease;
+  }
+  .success-screen.show { display: block; }
+  .success-icon { font-size: 60px; margin-bottom: 20px; }
+  .success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .success-screen p { font-size: 15px; color: var(--gray-500); line-height: 1.6; max-width: 440px; margin: 0 auto 28px; }
+  .success-steps { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto 28px; text-align: left; }
+  .success-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--navy); font-weight: 500; }
+  .ss-num {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--pro), var(--teal));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--navy);
+    padding: 28px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .footer-logo { display: flex; align-items: center; gap: 12px; }
+  .footer-text { font-family: 'DM Sans', sans-serif; font-size: 11px; color: rgba(255,255,255,0.2); text-align: right; }
+
+  /* Toggle switch */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    transition: border-color .15s;
+  }
+  .toggle-row:has(.toggle:checked) { border-color: var(--pro); background: var(--pro-light); }
+  .toggle-info { flex: 1; }
+  .toggle-label { font-size: 14px; font-weight: 600; color: var(--gray-700); }
+  .toggle-desc { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+  .toggle {
+    width: 44px; height: 24px;
+    -webkit-appearance: none;
+    background: var(--gray-200);
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: background .2s;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+  }
+  .toggle::before {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: white;
+    transition: transform .2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .toggle:checked { background: var(--pro); }
+  .toggle:checked::before { transform: translateX(20px); }
+  .toggle:focus { outline: none; box-shadow: 0 0 0 3px var(--pro-glow); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgNjAiIGZpbGw9Im5vbmUiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnMSIgeDE9IjEzIiB5MT0iMTYiIHgyPSIzOSIgeTI9IjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZDRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTczZTgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImcyIiB4MT0iMTMiIHkxPSIyMiIgeDI9IjM5IiB5Mj0iMjkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwZDRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9InJnYmEoMjYsMTE1LDIzMiwwLjUpIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0LDExKSBzY2FsZSgxLjApIj4KICAgIDxsaW5lIHgxPSIxMyIgeTE9IjE2IiB4Mj0iMzkiIHkyPSI5IiAgc3Ryb2tlPSJ1cmwoI2cxKSIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1kYXNoYXJyYXk9IjIgMiIvPgogICAgPGxpbmUgeDE9IjEzIiB5MT0iMjIiIHgyPSIzOSIgeTI9IjI5IiBzdHJva2U9InVybCgjZzIpIiBzdHJva2Utd2lkdGg9IjEuMiIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+CiAgICA8bGluZSB4MT0iNDQiIHkxPSIxMiIgeDI9IjQ0IiB5Mj0iMjYiIHN0cm9rZT0icmdiYSgwLDIxMiwyNTUsMC4yNSkiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0iMiAyIi8+CiAgICA8Y2lyY2xlIGN4PSI4IiAgY3k9IjE5IiByPSI1IiAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwZDRmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDxjaXJjbGUgY3g9IjgiICBjeT0iMTkiIHI9IjIuNSIgZmlsbD0iIzFhNzNlOCIvPgogICAgPGNpcmNsZSBjeD0iNDQiIGN5PSI3IiAgcj0iNSIgICBmaWxsPSJub25lIiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICA8Y2lyY2xlIGN4PSI0NCIgY3k9IjciICByPSIyLjUiIGZpbGw9IiMxYTczZTgiLz4KICAgIDxjaXJjbGUgY3g9IjQ0IiBjeT0iMzEiIHI9IjUiICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDAsMjEyLDI1NSwwLjUpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPGNpcmNsZSBjeD0iNDQiIGN5PSIzMSIgcj0iMi41IiBmaWxsPSJyZ2JhKDI2LDExNSwyMzIsMC41NSkiLz4KICA8L2c+CiAgPHRleHQgeD0iNjIiIHk9IjM2IiBmb250LWZhbWlseT0iUmFqZGhhbmksUG9wcGlucyxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjI4IiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iI2ZmZmZmZiI+CiAgICA8dHNwYW4gZmlsbD0iIzAwZDRmZiI+SVQ8L3RzcGFuPi1JbnRlZ3JhbAogIDwvdGV4dD4KICA8dGV4dCB4PSI2NCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJQb3BwaW5zLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSIzMDAiIGZvbnQtc2l6ZT0iOSIgbGV0dGVyLXNwYWNpbmc9IjUiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yOCkiPlNPTFVUSU9OUzwvdGV4dD4KPC9zdmc+" alt="IT-Integral Solutions" style="height:40px;display:block;">
+    </div>
+
+    <div class="tass-badge"><span>TASS · Plan PRO</span></div>
+    <h1>Formulario de<br><em>Implementación PRO</em></h1>
+    <p>Completá estos datos para configurar tu sistema TASS PRO personalizado. Incluye Client Manager, Payment Tracker y Sales Dashboard.</p>
+
+    <div class="pro-highlight">
+      <div class="pro-highlight-icon">🚀</div>
+      <div class="pro-highlight-text">
+        <strong>Plan PRO activado</strong>
+        Incluye 6 módulos completos · Onboarding extendido · Soporte prioritario
+      </div>
+    </div>
+
+    <div class="header-steps">
+      <div class="h-step active" onclick="goTo(0)">
+        <span class="h-step-num">1</span>Tus datos
+      </div>
+      <div class="h-step" onclick="goTo(1)">
+        <span class="h-step-num">2</span>Tu marca
+      </div>
+      <div class="h-step" onclick="goTo(2)">
+        <span class="h-step-num">3</span>Producto
+      </div>
+      <div class="h-step" onclick="goTo(3)">
+        <span class="h-step-num">4</span>Clientes
+      </div>
+      <div class="h-step" onclick="goTo(4)">
+        <span class="h-step-num">5</span>Pagos
+      </div>
+      <div class="h-step" onclick="goTo(5)">
+        <span class="h-step-num">6</span>Cierre
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ── SECCIÓN 1: DATOS DEL AGENTE ── -->
+  <div class="section active" id="sec-0">
+    <div class="section-header">
+      <div class="section-icon">👤</div>
+      <div>
+        <div class="section-title">Datos del Agente</div>
+        <div class="section-subtitle">Información de contacto y datos de la agencia</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="Ej: María González" required>
+      </div>
+      <div class="field-group">
+        <label>Nombre de la agencia <span class="req">*</span></label>
+        <input type="text" id="agencia" placeholder="Ej: Viajes del Sur">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Email de trabajo <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="hola@tuagencia.com">
+      </div>
+      <div class="field-group">
+        <label>WhatsApp / Teléfono <span class="req">*</span></label>
+        <input type="tel" id="telefono" placeholder="+54 9 11 0000-0000">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Sitio web <span class="opt">(opcional)</span></label>
+      <input type="url" id="web" placeholder="https://tuagencia.com">
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>País y ciudad donde operás <span class="req">*</span></label>
+        <input type="text" id="pais" placeholder="Ej: Argentina · Buenos Aires">
+      </div>
+      <div class="field-group">
+        <label>¿Trabajás solo/a o en equipo? <span class="req">*</span></label>
+        <select id="equipo">
+          <option value="">— Seleccioná —</option>
+          <option value="solo">Solo/a</option>
+          <option value="2-3">Equipo de 2-3 personas</option>
+          <option value="4-10">Equipo de 4-10 personas</option>
+          <option value="mas10">Más de 10 personas</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>¿Cuántos clientes activos manejás aproximadamente? <span class="req">*</span></label>
+      <div class="range-wrap">
+        <input type="range" id="clientes-range" min="0" max="500" step="10" value="50" oninput="document.getElementById('clientes-val').textContent=this.value">
+        <div class="range-val" id="clientes-val">50</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <span class="progress-text">Paso 1 de 6</span>
+      <button class="btn btn-primary" onclick="next(0)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 2: MARCA ── -->
+  <div class="section" id="sec-1">
+    <div class="section-header">
+      <div class="section-icon">🎨</div>
+      <div>
+        <div class="section-title">Identidad de Marca</div>
+        <div class="section-subtitle">Para personalizar el sistema con tu imagen</div>
+      </div>
+    </div>
+
+    <div class="hint">
+      Cuanto más completa sea esta sección, más profesional y alineado a tu marca quedará el sistema.
+    </div>
+
+    <div class="field-group">
+      <label>Logo <span class="req">*</span></label>
+      <div class="file-drop" id="logo-drop">
+        <input type="file" id="logo" name="logo" accept="image/*,.svg,.pdf" onchange="handleFile(this,'logo-name')">
+        <div class="file-drop-icon">📎</div>
+        <p><strong>Subí tu logo</strong><br>PNG, SVG o PDF · Fondo transparente ideal</p>
+        <div class="file-name" id="logo-name"></div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label>Color principal <span class="req">*</span></label>
+        <div class="color-row">
+          <input type="color" id="color1-pick" value="#0D1B3E" oninput="syncColor('color1-pick','color1-hex')">
+          <input type="text" id="color1-hex" placeholder="#0D1B3E" oninput="syncHex('color1-hex','color1-pick')">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Color secundario <span class="opt">(opcional)</span></label>
+        <div class="color-row">
+          <input type="color" id="color2-pick" value="#00B4D8" oninput="syncColor('color2-pick','color2-hex')">
+          <input type="text" id="color2-hex" placeholder="#00B4D8" oninput="syncHex('color2-hex','color2-pick')">
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>Firma de mail <span class="opt">(opcional)</span></label>
+      <textarea id="firma" placeholder="Pegá acá el texto de tu firma actual, o describí cómo querés que quede..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Slogan o frase de marca <span class="opt">(opcional)</span></label>
+      <input type="text" id="slogan" placeholder="Ej: Viajá sin límites">
+    </div>
+
+    <div class="field-group">
+      <label>Tono de comunicación con tus clientes <span class="req">*</span></label>
+      <div class="chips-wrap">
+        <div class="chip" onclick="toggleChipSingle(this,'tono-chips')">Formal y profesional</div>
+        <div class="chip" onclick="toggleChipSingle(this,'tono-chips')">Cercano y amigable</div>
+        <div class="chip" onclick="toggleChipSingle(this,'tono-chips')">Entusiasta y dinámico</div>
+        <div class="chip" onclick="toggleChipSingle(this,'tono-chips')">Exclusivo y premium</div>
+      </div>
+      <input type="hidden" id="tono-chips">
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(1)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 2 de 6</span>
+        <button class="btn btn-primary" onclick="next(1)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: PRODUCTO ── -->
+  <div class="section" id="sec-2">
+    <div class="section-header">
+      <div class="section-icon">✈️</div>
+      <div>
+        <div class="section-title">Tu Producto</div>
+        <div class="section-subtitle">Qué vendés y cómo lo vendés</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Destinos principales que vendés <span class="req">*</span></label>
+      <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Seleccioná todos los que aplican</p>
+      <div class="chips-wrap" id="destinos-chips">
+        <div class="chip" onclick="toggleChip(this)">Caribe</div>
+        <div class="chip" onclick="toggleChip(this)">Europa</div>
+        <div class="chip" onclick="toggleChip(this)">USA / Canadá</div>
+        <div class="chip" onclick="toggleChip(this)">América del Sur</div>
+        <div class="chip" onclick="toggleChip(this)">México</div>
+        <div class="chip" onclick="toggleChip(this)">Asia</div>
+        <div class="chip" onclick="toggleChip(this)">Cruceros</div>
+        <div class="chip" onclick="toggleChip(this)">Luna de miel</div>
+        <div class="chip" onclick="toggleChip(this)">Turismo aventura</div>
+        <div class="chip" onclick="toggleChip(this)">Corporativo</div>
+        <div class="chip" onclick="toggleChip(this)">Patagonia</div>
+        <div class="chip" onclick="toggleChip(this)">África / Safari</div>
+        <div class="chip" onclick="toggleChip(this)">Disney / Orlando</div>
+        <div class="chip" onclick="toggleChip(this)">Universal Studios</div>
+        <div class="chip" onclick="toggleChip(this)">California</div>
+      </div>
+    </div>
+
+    <div class="field-group" style="margin-top:14px">
+      <label>Otros destinos <span class="opt">(opcional)</span></label>
+      <input type="text" id="otros-destinos" placeholder="Ej: Islandia, Japón, Galápagos...">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Qué tipo de presupuestos armás? <span class="req">*</span></label>
+      <textarea id="tipo-presupuestos" placeholder="Ej: Paquetes completos (vuelo + hotel + traslados), solo alojamiento, circuitos guiados..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>¿Tenés plantillas de presupuesto actuales? <span class="req">*</span></label>
+      <select id="tiene-plantillas">
+        <option value="">— Seleccioná —</option>
+        <option value="si-excel">Sí, en Excel / Google Sheets</option>
+        <option value="si-word">Sí, en Word / PDF</option>
+        <option value="si-otro">Sí, en otro formato</option>
+        <option value="no">No, armo cada uno desde cero</option>
+        <option value="mental">Las manejo de memoria / WhatsApp</option>
+      </select>
+    </div>
+
+    <div class="field-group" id="adjuntar-plantilla-wrap" style="display:none">
+      <label>Adjuntá una plantilla de ejemplo <span class="opt">(opcional pero útil)</span></label>
+      <div class="file-drop">
+        <input type="file" id="plantilla" name="plantilla" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx" onchange="handleFile(this,'plantilla-name')">
+        <div class="file-drop-icon">📊</div>
+        <p><strong>Subí una plantilla</strong><br>Excel, Word o PDF</p>
+        <div class="file-name" id="plantilla-name"></div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(2)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 3 de 6</span>
+        <button class="btn btn-primary" onclick="next(2)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 4: GESTIÓN DE CLIENTES (PRO) ── -->
+  <div class="section" id="sec-3">
+    <div class="section-header">
+      <div class="section-icon">🗂️</div>
+      <div>
+        <div class="section-title">Gestión de Clientes</div>
+        <div class="section-subtitle">Client Manager — cómo organizás tu cartera</div>
+        <div class="pro-section-badge">⭐ Módulo PRO</div>
+      </div>
+    </div>
+
+    <div class="hint-pro">
+      <strong>Client Manager</strong> permite organizar toda tu cartera de clientes, historial de viajes y seguimiento de leads. Estos datos nos ayudan a configurarlo a tu medida.
+    </div>
+
+    <div class="field-group">
+      <label>¿Cómo organizás tus clientes actualmente? <span class="req">*</span></label>
+      <div class="chips-wrap" id="organiza-chips">
+        <div class="chip" onclick="toggleChip(this)">WhatsApp / chats</div>
+        <div class="chip" onclick="toggleChip(this)">Excel / planilla</div>
+        <div class="chip" onclick="toggleChip(this)">Agenda / papel</div>
+        <div class="chip" onclick="toggleChip(this)">CRM propio</div>
+        <div class="chip" onclick="toggleChip(this)">Email / Gmail</div>
+        <div class="chip" onclick="toggleChip(this)">No los organizo aún</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Qué información guardás de cada cliente? <span class="req">*</span></label>
+      <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Seleccioná todo lo que registrás hoy</p>
+      <div class="chips-wrap" id="info-cliente-chips">
+        <div class="chip" onclick="toggleChip(this)">Datos personales</div>
+        <div class="chip" onclick="toggleChip(this)">Historial de viajes</div>
+        <div class="chip" onclick="toggleChip(this)">Preferencias de destino</div>
+        <div class="chip" onclick="toggleChip(this)">Presupuesto disponible</div>
+        <div class="chip" onclick="toggleChip(this)">Fechas importantes</div>
+        <div class="chip" onclick="toggleChip(this)">Pasaporte / documentos</div>
+        <div class="chip" onclick="toggleChip(this)">Composición familiar</div>
+        <div class="chip" onclick="toggleChip(this)">Notas personales</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Hacés seguimiento de leads (consultas sin cerrar)? <span class="req">*</span></label>
+      <div class="cond-cards">
+        <div class="cond-card" onclick="selectCond(this,'si-activo')">
+          <input type="radio" name="cond-leads" value="si-activo">
+          <div class="cond-card-label">Sí, activamente</div>
+          <div class="cond-card-desc">Hago seguimiento sistemático</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'si-informal')">
+          <input type="radio" name="cond-leads" value="si-informal">
+          <div class="cond-card-label">A veces</div>
+          <div class="cond-card-desc">Cuando me acuerdo</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'no-proceso')">
+          <input type="radio" name="cond-leads" value="no-proceso">
+          <div class="cond-card-label">No tengo proceso</div>
+          <div class="cond-card-desc">Quiero implementarlo</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'no-necesito')">
+          <input type="radio" name="cond-leads" value="no-necesito">
+          <div class="cond-card-label">No lo necesito</div>
+          <div class="cond-card-desc">Trabajo por referidos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>¿Cada cuánto contactás a tus clientes para retenerlos? <span class="opt">(opcional)</span></label>
+      <select id="frecuencia-contacto">
+        <option value="">— Seleccioná —</option>
+        <option value="siempre">Continuamente / estoy en contacto</option>
+        <option value="mensual">Una vez al mes</option>
+        <option value="trimestral">Cada 2-3 meses</option>
+        <option value="viaje">Solo cuando viajan</option>
+        <option value="nunca">No tengo una frecuencia definida</option>
+      </select>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(3)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 4 de 6</span>
+        <button class="btn btn-primary" onclick="next(3)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 5: PAGOS Y DASHBOARD (PRO) ── -->
+  <div class="section" id="sec-4">
+    <div class="section-header">
+      <div class="section-icon">💰</div>
+      <div>
+        <div class="section-title">Pagos y Dashboard</div>
+        <div class="section-subtitle">Payment Tracker + Sales Dashboard</div>
+        <div class="pro-section-badge">⭐ Módulo PRO</div>
+      </div>
+    </div>
+
+    <div class="hint-pro">
+      <strong>Payment Tracker</strong> registra cobros, vencimientos y alertas. <strong>Sales Dashboard</strong> muestra tus métricas de ventas en tiempo real. Configuramos ambos según tu flujo.
+    </div>
+
+    <div class="field-group">
+      <label>¿Cómo registrás los pagos hoy? <span class="req">*</span></label>
+      <div class="chips-wrap" id="registra-pagos-chips">
+        <div class="chip" onclick="toggleChip(this)">Excel / planilla propia</div>
+        <div class="chip" onclick="toggleChip(this)">Cuaderno / papel</div>
+        <div class="chip" onclick="toggleChip(this)">App de banco</div>
+        <div class="chip" onclick="toggleChip(this)">Sistema contable</div>
+        <div class="chip" onclick="toggleChip(this)">No los registro formalmente</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>Condiciones de pago que ofrecés a clientes <span class="req">*</span></label>
+      <div class="cond-cards">
+        <div class="cond-card" onclick="selectCond(this,'seña-saldo')">
+          <input type="radio" name="cond-pago" value="seña-saldo">
+          <div class="cond-card-label">Seña + Saldo</div>
+          <div class="cond-card-desc">Pago en 2 cuotas antes del viaje</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'cuotas')">
+          <input type="radio" name="cond-pago" value="cuotas">
+          <div class="cond-card-label">Cuotas mensuales</div>
+          <div class="cond-card-desc">Plan de pago en varios meses</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'contado')">
+          <input type="radio" name="cond-pago" value="contado">
+          <div class="cond-card-label">Contado total</div>
+          <div class="cond-card-desc">Pago único al reservar</div>
+        </div>
+        <div class="cond-card" onclick="selectCond(this,'mixto')">
+          <input type="radio" name="cond-pago" value="mixto">
+          <div class="cond-card-label">Mixto / Variable</div>
+          <div class="cond-card-desc">Depende del paquete</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Medios de pago que aceptás <span class="req">*</span></label>
+      <div class="chips-wrap" id="medios-chips">
+        <div class="chip" onclick="toggleChip(this)">Transferencia bancaria</div>
+        <div class="chip" onclick="toggleChip(this)">MercadoPago</div>
+        <div class="chip" onclick="toggleChip(this)">Tarjeta de crédito</div>
+        <div class="chip" onclick="toggleChip(this)">Tarjeta de débito</div>
+        <div class="chip" onclick="toggleChip(this)">Efectivo</div>
+        <div class="chip" onclick="toggleChip(this)">PayPal</div>
+        <div class="chip" onclick="toggleChip(this)">Cripto</div>
+        <div class="chip" onclick="toggleChip(this)">Western Union</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Qué métricas te importa ver en tu dashboard? <span class="req">*</span></label>
+      <p style="font-size:12px;color:var(--gray-500);margin-bottom:10px">Priorizá las más importantes para vos</p>
+      <div class="chips-wrap" id="metricas-chips">
+        <div class="chip" onclick="toggleChip(this)">Ventas del mes</div>
+        <div class="chip" onclick="toggleChip(this)">Cobros pendientes</div>
+        <div class="chip" onclick="toggleChip(this)">Destinos más vendidos</div>
+        <div class="chip" onclick="toggleChip(this)">Clientes nuevos vs recurrentes</div>
+        <div class="chip" onclick="toggleChip(this)">Tasa de cierre de leads</div>
+        <div class="chip" onclick="toggleChip(this)">Ingresos proyectados</div>
+        <div class="chip" onclick="toggleChip(this)">Viajes por mes</div>
+        <div class="chip" onclick="toggleChip(this)">Ticket promedio</div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(4)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 5 de 6</span>
+        <button class="btn btn-primary" onclick="next(4)">Continuar →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 6: CIERRE ── -->
+  <div class="section" id="sec-5">
+    <div class="section-header">
+      <div class="section-icon">🎯</div>
+      <div>
+        <div class="section-title">Últimos detalles</div>
+        <div class="section-subtitle">Para dejar tu sistema 100% listo</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Funcionalidades extra que querés activar <span class="opt">(opcional)</span></label>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">🌐 Mini sitio web incluido</div>
+          <div class="toggle-desc">Página de presentación de tu agencia con formulario de consulta</div>
+        </div>
+        <input type="checkbox" class="toggle" id="toggle-web">
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">📧 Email con dominio propio</div>
+          <div class="toggle-desc">Ej: hola@tuagencia.com — más profesional</div>
+        </div>
+        <input type="checkbox" class="toggle" id="toggle-email">
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">📲 Instagram automatizado</div>
+          <div class="toggle-desc">Respuestas automáticas a consultas por DM</div>
+        </div>
+        <input type="checkbox" class="toggle" id="toggle-instagram">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field-group">
+      <label>¿Qué herramientas o sistemas usás hoy en tu agencia? <span class="opt">(opcional)</span></label>
+      <textarea id="herramientas" placeholder="Ej: Gmail, WhatsApp Business, Amadeus, Excel, Canva, Mailchimp..."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>¿Hay algo más que debamos saber para configurar tu sistema PRO?</label>
+      <textarea id="notas-extra" placeholder="Cualquier detalle especial, flujo de trabajo particular, integraciones que necesitás, etc."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Disponibilidad para la videollamada de onboarding <span class="req">*</span></label>
+      <textarea id="disponibilidad" placeholder="Ej: Lunes a viernes de 10 a 18 hs · Prefiero Zoom · Zona horaria Argentina" style="min-height:70px"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-ghost" onclick="prev(5)">← Atrás</button>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span class="progress-text">Paso 6 de 6</span>
+        <button class="btn-submit" onclick="submit()">Enviar formulario PRO ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ── -->
+  <div class="success-screen" id="success">
+    <div class="success-icon">🚀</div>
+    <h2>¡Tu TASS PRO está en camino!</h2>
+    <p>Recibimos tu formulario completo. El equipo IT Integral Solutions tiene todo lo que necesita para configurar tu sistema PRO personalizado.</p>
+    <div class="success-steps">
+      <div class="success-step"><div class="ss-num">1</div>Revisamos tu formulario en detalle (hoy)</div>
+      <div class="success-step"><div class="ss-num">2</div>Comenzamos configuración de los 6 módulos (15–20 días hábiles)</div>
+      <div class="success-step"><div class="ss-num">3</div>Videollamada de entrega y onboarding extendido</div>
+      <div class="success-step"><div class="ss-num">4</div>Soporte prioritario por WhatsApp activado</div>
+    </div>
+    <p style="font-size:13px">¿Preguntas? Escribinos por WhatsApp al <a href="https://wa.me/5491133634277?text=Tengo%20una%20consulta%20sobre%20mi%20TASS%20PRO" style="color:var(--pro);font-weight:600">+54 9 11 3363-4277</a></p>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">
+    <svg width="36" height="26" viewBox="0 0 52 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="8" cy="19" r="5" fill="none" stroke="#C9952A" stroke-width="1.5"/>
+      <circle cx="8" cy="19" r="2.5" fill="#C9952A"/>
+      <circle cx="44" cy="7" r="5" fill="none" stroke="#C9952A" stroke-width="1.5"/>
+      <circle cx="44" cy="7" r="2.5" fill="#C9952A"/>
+      <circle cx="44" cy="31" r="5" fill="none" stroke="rgba(201,149,42,0.45)" stroke-width="1.5"/>
+      <circle cx="44" cy="31" r="2.5" fill="rgba(201,149,42,0.35)"/>
+      <line x1="13" y1="16" x2="39" y2="9" stroke="url(#ftg1)" stroke-width="1.2" stroke-dasharray="2 2"/>
+      <line x1="13" y1="22" x2="39" y2="29" stroke="url(#ftg2)" stroke-width="1.2" stroke-dasharray="2 2"/>
+      <line x1="44" y1="12" x2="44" y2="26" stroke="rgba(201,149,42,0.2)" stroke-width="1" stroke-dasharray="2 2"/>
+      <defs>
+        <linearGradient id="ftg1" x1="13" y1="16" x2="39" y2="9" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#C9952A"/><stop offset="100%" stop-color="rgba(201,149,42,0.55)"/>
+        </linearGradient>
+        <linearGradient id="ftg2" x1="13" y1="22" x2="39" y2="29" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#C9952A"/><stop offset="100%" stop-color="rgba(201,149,42,0.35)"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div>
+      <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);"><span style="color:#C9952A;">IT</span>-Integral Solutions</div>
+      <div style="font-family:'DM Sans',sans-serif;font-weight:300;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.2);">Desarrollado por IT Integral Solutions</div>
+    </div>
+  </div>
+  <div class="footer-text">
+    Sistema TASS PRO · Travel Agent Sales System<br>
+    <span style="color:rgba(255,255,255,.12);">© 2025 IT Integral Solutions</span>
+  </div>
+</footer>
+
+<script>
+  let current = 0;
+
+  function goTo(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.h-step').forEach((s, i) => {
+      s.classList.remove('active', 'done');
+      if (i < n) s.classList.add('done');
+    });
+    document.getElementById('sec-' + n).classList.add('active');
+    document.querySelectorAll('.h-step')[n].classList.add('active');
+    current = n;
+    window.scrollTo({top: 0, behavior:'smooth'});
+  }
+
+  function next(from) {
+    if (from === 0) {
+      const nombre = document.getElementById('nombre').value.trim();
+      const email  = document.getElementById('email').value.trim();
+      const tel    = document.getElementById('telefono').value.trim();
+      if (!nombre || !email || !tel) {
+        alert('Por favor completá nombre, email y teléfono antes de continuar.');
+        return;
+      }
+    }
+    if (from < 5) goTo(from + 1);
+  }
+
+  function prev(from) {
+    if (from > 0) goTo(from - 1);
+  }
+
+  function toggleChip(el) { el.classList.toggle('selected'); }
+
+  function toggleChipSingle(el, groupId) {
+    el.closest('.chips-wrap').querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectCond(card, val) {
+    const group = card.closest('.cond-cards');
+    group.querySelectorAll('.cond-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+
+  function syncColor(pickId, hexId) {
+    document.getElementById(hexId).value = document.getElementById(pickId).value;
+  }
+  function syncHex(hexId, pickId) {
+    const val = document.getElementById(hexId).value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) document.getElementById(pickId).value = val;
+  }
+
+  function handleFile(input, nameId) {
+    const el = document.getElementById(nameId);
+    if (input.files[0]) {
+      el.textContent = '✓ ' + input.files[0].name;
+      el.style.display = 'block';
+    }
+  }
+
+  document.getElementById('tiene-plantillas').addEventListener('change', function() {
+    const wrap = document.getElementById('adjuntar-plantilla-wrap');
+    wrap.style.display = (this.value && this.value !== 'no' && this.value !== 'mental') ? 'block' : 'none';
+  });
+
+  function getChips(id) {
+    return [...document.querySelectorAll('#' + id + ' .chip.selected')].map(c => c.textContent).join(', ');
+  }
+
+  async function submit() {
+    const disp = document.getElementById('disponibilidad').value.trim();
+    if (!disp) {
+      alert('Por favor indicá tu disponibilidad para la videollamada.');
+      return;
+    }
+
+    const condPago  = document.querySelector('[name="cond-pago"].checked')?.closest('.cond-card')?.querySelector('.cond-card-label')?.textContent
+                   || document.querySelector('.cond-card.selected .cond-card-label')?.textContent || '';
+    const condLeads = document.querySelector('[name="cond-leads"].checked')?.closest('.cond-card')?.querySelector('.cond-card-label')?.textContent
+                   || '';
+
+    const payload = {
+      nombre:               document.getElementById('nombre').value,
+      agencia:              document.getElementById('agencia').value,
+      email:                document.getElementById('email').value,
+      _replyto:             document.getElementById('email').value,
+      telefono:             document.getElementById('telefono').value,
+      web:                  document.getElementById('web').value,
+      pais:                 document.getElementById('pais').value,
+      equipo:               document.getElementById('equipo').value,
+      clientes_activos:     document.getElementById('clientes-val').textContent,
+      color_principal:      document.getElementById('color1-hex').value || document.getElementById('color1-pick').value,
+      color_secundario:     document.getElementById('color2-hex').value || document.getElementById('color2-pick').value,
+      slogan:               document.getElementById('slogan').value,
+      firma:                document.getElementById('firma').value,
+      tono_comunicacion:    getChips('tono-chips') || document.querySelector('#sec-1 .chip.selected')?.textContent || '',
+      destinos_principales: getChips('destinos-chips'),
+      otros_destinos:       document.getElementById('otros-destinos').value,
+      tipo_presupuestos:    document.getElementById('tipo-presupuestos').value,
+      tiene_plantillas:     document.getElementById('tiene-plantillas').value,
+      organiza_clientes:    getChips('organiza-chips'),
+      info_cliente:         getChips('info-cliente-chips'),
+      seguimiento_leads:    condLeads,
+      frecuencia_contacto:  document.getElementById('frecuencia-contacto').value,
+      registra_pagos:       getChips('registra-pagos-chips'),
+      condicion_pago:       condPago,
+      medios_de_pago:       getChips('medios-chips'),
+      metricas_dashboard:   getChips('metricas-chips'),
+      addon_web:            document.getElementById('toggle-web').checked ? 'Sí' : 'No',
+      addon_email:          document.getElementById('toggle-email').checked ? 'Sí' : 'No',
+      addon_instagram:      document.getElementById('toggle-instagram').checked ? 'Sí' : 'No',
+      herramientas:         document.getElementById('herramientas').value,
+      notas_extra:          document.getElementById('notas-extra').value,
+      disponibilidad:       disp,
+    };
+    const formData = new FormData();
+
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
+      formData.append('subject', 'Nueva implementación TASS PRO — ' + (document.getElementById('nombre').value || ''));
+      formData.append('from_name', 'Formulario TASS PRO');
+      formData.append('replyto', document.getElementById('email').value);
+      formData.append('botcheck', 'false');
+
+      Object.entries(payload).forEach(([key, value]) => {
+        formData.append(key, value || '');
+      });
+
+      const logoFile = document.getElementById('logo').files[0];
+      if (logoFile) formData.append('logo', logoFile);
+
+      const plantillaFile = document.getElementById('plantilla').files[0];
+      if (plantillaFile) formData.append('plantilla', plantillaFile);
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (res.ok) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.h-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+        document.getElementById('success').classList.add('show');
+        window.scrollTo({top: 0, behavior:'smooth'});
+      } else {
+        throw new Error('Error al enviar');
+      }
+    } catch(e) {
+      btn.textContent = 'Enviar formulario PRO ✓';
+      btn.disabled = false;
+      alert('Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
+    }
+  }
+
+  document.querySelectorAll('.file-drop').forEach(drop => {
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+    drop.addEventListener('drop', () => drop.classList.remove('dragover'));
+  });
+</script>
+</body>
+</html>
