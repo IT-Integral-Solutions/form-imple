@@ -1183,6 +1183,9 @@
 
   async function submit() {
     const disp = document.getElementById('disponibilidad').value.trim();
+    const nombre = document.getElementById('nombre').value.trim();
+    const agencia = document.getElementById('agencia').value.trim();
+    const email = document.getElementById('email').value.trim();
     if (!disp) {
       alert('Por favor indicá tu disponibilidad para la videollamada.');
       return;
@@ -1194,10 +1197,13 @@
                    || '';
 
     const payload = {
-      nombre:               document.getElementById('nombre').value,
-      agencia:              document.getElementById('agencia').value,
-      email:                document.getElementById('email').value,
-      _replyto:             document.getElementById('email').value,
+      name:                 nombre,
+      nombre:               nombre,
+      agencia:              agencia,
+      email:                email,
+      _replyto:             email,
+      replyto:              email,
+      message:              `Nueva implementación TASS PRO\n\nCliente: ${nombre}\nAgencia: ${agencia}\nEmail: ${email}\nDisponibilidad: ${disp}`,
       telefono:             document.getElementById('telefono').value,
       web:                  document.getElementById('web').value,
       pais:                 document.getElementById('pais').value,
@@ -1250,9 +1256,9 @@
       if (hasFiles) {
         const formData = new FormData();
         formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
-        formData.append('subject', 'Nueva implementación TASS PRO — ' + (document.getElementById('nombre').value || ''));
+        formData.append('subject', 'Nueva implementación TASS PRO — ' + (nombre || ''));
         formData.append('from_name', 'Formulario TASS PRO');
-        formData.append('replyto', document.getElementById('email').value);
+        formData.append('replyto', email);
         formData.append('botcheck', '');
 
         Object.entries(payload).forEach(([key, value]) => {
@@ -1272,9 +1278,9 @@
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
             access_key: '2023fc73-9f5e-4276-a4bb-75eec251f67e',
-            subject: 'Nueva implementación TASS PRO — ' + (document.getElementById('nombre').value || ''),
+            subject: 'Nueva implementación TASS PRO — ' + (nombre || ''),
             from_name: 'Formulario TASS PRO',
-            replyto: document.getElementById('email').value,
+            replyto: email,
             botcheck: '',
             ...payload
           })

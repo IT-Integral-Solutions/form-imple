@@ -1531,6 +1531,9 @@
   async function submit() {
     const disp = document.getElementById('disponibilidad').value.trim();
     const obj  = document.getElementById('objetivo-6m').value.trim();
+    const nombre = document.getElementById('nombre').value.trim();
+    const agencia = document.getElementById('agencia').value.trim();
+    const email = document.getElementById('email').value.trim();
     if (!disp) { alert('Por favor indicá tu disponibilidad para el kick-off.'); return; }
     if (!obj)  { alert('Por favor completá tu objetivo para los próximos 6 meses.'); return; }
 
@@ -1542,10 +1545,13 @@
 
     const payload = {
       // Sección 1
-      nombre:               document.getElementById('nombre').value,
-      agencia:              document.getElementById('agencia').value,
-      email:                document.getElementById('email').value,
-      _replyto:             document.getElementById('email').value,
+      name:                 nombre,
+      nombre:               nombre,
+      agencia:              agencia,
+      email:                email,
+      _replyto:             email,
+      replyto:              email,
+      message:              `Nueva implementación TASS Elite\n\nCliente: ${nombre}\nAgencia: ${agencia}\nEmail: ${email}\nObjetivo 6 meses: ${obj}\nDisponibilidad: ${disp}`,
       telefono:             document.getElementById('telefono').value,
       web_actual:           document.getElementById('web-actual').value,
       pais:                 document.getElementById('pais').value,
@@ -1622,9 +1628,9 @@
       if (hasFiles) {
         const formData = new FormData();
         formData.append('access_key', '2023fc73-9f5e-4276-a4bb-75eec251f67e');
-        formData.append('subject', 'Nueva implementación TASS Elite ★ — ' + (document.getElementById('nombre').value || '') + ' · ' + (document.getElementById('agencia').value || ''));
+        formData.append('subject', 'Nueva implementación TASS Elite ★ — ' + (nombre || '') + ' · ' + (agencia || ''));
         formData.append('from_name', 'Formulario TASS Elite');
-        formData.append('replyto', document.getElementById('email').value);
+        formData.append('replyto', email);
         formData.append('botcheck', '');
 
         Object.entries(payload).forEach(([key, value]) => {
@@ -1650,9 +1656,9 @@
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
             access_key: '2023fc73-9f5e-4276-a4bb-75eec251f67e',
-            subject: 'Nueva implementación TASS Elite ★ — ' + (document.getElementById('nombre').value || '') + ' · ' + (document.getElementById('agencia').value || ''),
+            subject: 'Nueva implementación TASS Elite ★ — ' + (nombre || '') + ' · ' + (agencia || ''),
             from_name: 'Formulario TASS Elite',
-            replyto: document.getElementById('email').value,
+            replyto: email,
             botcheck: '',
             ...payload
           })
