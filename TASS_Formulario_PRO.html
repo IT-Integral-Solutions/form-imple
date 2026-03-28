@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TASS · Formulario de Implementación PRO</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
     --navy: #0D1B3E;
@@ -464,6 +465,8 @@
   }
   .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(124,58,237,0.45); }
   .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+  .captcha-wrap { margin-top: 20px; }
+  .captcha-note { margin-top: 10px; font-size: 12px; color: var(--gray-500); }
 
   /* Success */
   .success-screen {
@@ -1052,6 +1055,11 @@
       <textarea id="disponibilidad" placeholder="Ej: Lunes a viernes de 10 a 18 hs · Prefiero Zoom · Zona horaria Argentina" style="min-height:70px"></textarea>
     </div>
 
+    <div class="captcha-wrap">
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAACwVsgTtkNWZiXfY" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError"></div>
+      <div class="captcha-note">Verificación de seguridad para proteger el formulario.</div>
+    </div>
+
     <div class="nav">
       <button class="btn btn-ghost" onclick="prev(5)">← Atrás</button>
       <div style="display:flex;align-items:center;gap:16px">
@@ -1111,7 +1119,20 @@
 </footer>
 
 <script>
+  let turnstileToken = '';
   let current = 0;
+
+  function onTurnstileSuccess(token) {
+    turnstileToken = token;
+  }
+
+  function onTurnstileExpired() {
+    turnstileToken = '';
+  }
+
+  function onTurnstileError() {
+    turnstileToken = '';
+  }
 
   function goTo(n) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1190,6 +1211,10 @@
       alert('Por favor indicá tu disponibilidad para la videollamada.');
       return;
     }
+    if (!turnstileToken) {
+      alert('Por favor completá la verificación de seguridad antes de enviar.');
+      return;
+    }
 
     const condPago  = document.querySelector('[name="cond-pago"].checked')?.closest('.cond-card')?.querySelector('.cond-card-label')?.textContent
                    || document.querySelector('.cond-card.selected .cond-card-label')?.textContent || '';
@@ -1259,6 +1284,7 @@
         formData.append('subject', 'Nueva implementación TASS PRO — ' + (nombre || ''));
         formData.append('from_name', 'TASS PRO');
         formData.append('replyto', email);
+        formData.append('cf-turnstile-response', turnstileToken);
 
         Object.entries(payload).forEach(([key, value]) => {
           formData.append(key, value || '');
@@ -1280,6 +1306,7 @@
             subject: 'Nueva implementación TASS PRO — ' + (nombre || ''),
             from_name: 'TASS PRO',
             replyto: email,
+            'cf-turnstile-response': turnstileToken,
             ...payload
           })
         });
@@ -1291,11 +1318,15 @@
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.h-step').forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
         document.getElementById('success').classList.add('show');
+        if (window.turnstile) window.turnstile.reset();
+        turnstileToken = '';
         window.scrollTo({top: 0, behavior:'smooth'});
       } else {
         throw new Error(result.message || 'Error al enviar el formulario.');
       }
     } catch(e) {
+      if (window.turnstile) window.turnstile.reset();
+      turnstileToken = '';
       btn.textContent = 'Enviar formulario PRO ✓';
       btn.disabled = false;
       alert(e.message || 'Hubo un problema al enviar. Revisá tu conexión e intentá de nuevo.');
